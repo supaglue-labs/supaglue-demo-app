@@ -6,10 +6,11 @@ import SalesforceIcon from "@/assets/connector_icons/salesforce.png";
 import { Content } from "@/components/Content";
 import IntegrationCard from "@/components/IntegrationCard";
 import { Nav } from "@/components/Nav";
+import { API_HOST, CUSTOMER_ID } from "@/lib/constants";
 
 export default async function Settings() {
   const response = await fetch(
-    "https://api.supaglue.io/mgmt/v2/customers/george-xing-demo/connections",
+    `${API_HOST}/mgmt/v2/customers/${CUSTOMER_ID}/connections`,
     {
       headers: {
         "Content-Type": "application/json",

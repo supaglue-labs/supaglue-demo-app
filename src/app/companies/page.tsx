@@ -4,198 +4,266 @@ import { Nav } from "@/components/Nav";
 function CompanyTable() {
   return (
     <div className="overflow-x-auto">
+      {/* Menu Bar */}
+      <div className="flex gap-4 my-4">
+        <button className="btn btn-primary btn-outline btn-sm">+ Save</button>
+        <button className="btn btn-primary btn-outline btn-sm">
+          Find People
+        </button>
+        <button className="btn btn-primary btn-outline btn-sm">Export</button>
+      </div>
+
       <table className="table table-xs">
         <thead>
           <tr>
             <th></th>
             <th>Name</th>
-            <th>Job</th>
-            <th>company</th>
-            <th>location</th>
-            <th>Last Login</th>
-            <th>Favorite Color</th>
+            <th>Industry</th>
+            <th>Website</th>
+            <th>Num of employees</th>
+            <th>Phone</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>1</th>
-            <td>Cy Ganderton</td>
-            <td>Quality Control Specialist</td>
-            <td>Littel, Schaden and Vandervort</td>
-            <td>Canada</td>
-            <td>12/16/2020</td>
-            <td>Blue</td>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
+            <td>Gordian Knot Technologies, Inc.</td>
+            <td>COMPUTER_SOFTWARE</td>
+            <td>gkti.com</td>
+            <td>-</td>
+            <td>+1 403-253-9409</td>
           </tr>
           <tr>
-            <th>2</th>
-            <td>Hart Hagerty</td>
-            <td>Desktop Support Technician</td>
-            <td>Zemlak, Daniel and Leannon</td>
-            <td>United States</td>
-            <td>12/5/2020</td>
-            <td>Purple</td>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
+            <td>MEGA International</td>
+            <td>COMPUTER_SOFTWARE</td>
+            <td>meta.com</td>
+            <td>1000</td>
+            <td>-</td>
           </tr>
           <tr>
-            <th>3</th>
-            <td>Brice Swyre</td>
-            <td>Tax Accountant</td>
-            <td>Carroll Group</td>
-            <td>China</td>
-            <td>8/15/2020</td>
-            <td>Red</td>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
+            <td>PDOA</td>
+            <td>HOSPITAL_HEALTH_CARE</td>
+            <td>pdoa.com</td>
+            <td>50</td>
+            <td>8436626233</td>
           </tr>
           <tr>
-            <th>4</th>
-            <td>Marjy Ferencz</td>
-            <td>Office Assistant I</td>
-            <td>Rowe-Schoen</td>
-            <td>Russia</td>
-            <td>3/25/2021</td>
-            <td>Crimson</td>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
+            <td>Nmgi</td>
+            <td>COMPUTER_SOFTWARE</td>
+            <td>NMGI.COM</td>
+            <td>50</td>
+            <td>+1 620-664-6000</td>
           </tr>
           <tr>
-            <th>5</th>
-            <td>Yancy Tear</td>
-            <td>Community Outreach Specialist</td>
-            <td>Wyman-Ledner</td>
-            <td>Brazil</td>
-            <td>5/22/2020</td>
-            <td>Indigo</td>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
+            <td>United Oil & Gas, UK</td>
+            <td>Energy</td>
+            <td>http://www.uos.com</td>
+            <td>24000</td>
+            <td>+44 191 4956203</td>
           </tr>
           <tr>
-            <th>6</th>
-            <td>Irma Vasilik</td>
-            <td>Editor</td>
-            <td>Wiza, Bins and Emard</td>
-            <td>Venezuela</td>
-            <td>12/8/2020</td>
-            <td>Purple</td>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
+            <td>United Oil & Gas, Singapore</td>
+            <td>Energy</td>
+            <td>http://www.uos.com</td>
+            <td>3000</td>
+            <td>(650) 450-8810</td>
           </tr>
           <tr>
-            <th>7</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Meghann Durtnal</td>
             <td>Staff Accountant IV</td>
-            <td>Schuster-Schimmel</td>
-            <td>Philippines</td>
-            <td>2/17/2021</td>
-            <td>Yellow</td>
+            <td>iticket.net</td>
+            <td>1000</td>
+            <td>(503)421-7800</td>
           </tr>
           <tr>
-            <th>8</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Sammy Seston</td>
             <td>Accountant I</td>
-            <td>O'Hara, Welch and Keebler</td>
-            <td>Indonesia</td>
-            <td>5/23/2020</td>
-            <td>Crimson</td>
+            <td>expresslt.net</td>
+            <td>20</td>
+            <td>(650)450-8810</td>
           </tr>
           <tr>
-            <th>9</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Lesya Tinham</td>
             <td>Safety Technician IV</td>
-            <td>Turner-Kuhlman</td>
-            <td>Philippines</td>
-            <td>2/21/2021</td>
-            <td>Maroon</td>
+            <td>grandhotels.com</td>
+            <td>500</td>
+            <td>(512) 757-6000</td>
           </tr>
           <tr>
-            <th>10</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Zaneta Tewkesbury</td>
             <td>VP Marketing</td>
             <td>Sauer LLC</td>
-            <td>Chad</td>
-            <td>6/23/2020</td>
-            <td>Green</td>
+            <td>10000</td>
+            <td>(014) 427-4427</td>
           </tr>
           <tr>
-            <th>11</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Andy Tipple</td>
             <td>Librarian</td>
-            <td>Hilpert Group</td>
-            <td>Poland</td>
-            <td>7/9/2020</td>
-            <td>Indigo</td>
+            <td>pyramid.net</td>
+            <td>25000</td>
+            <td>+44 191 4956203</td>
           </tr>
           <tr>
-            <th>12</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Sophi Biles</td>
             <td>Recruiting Manager</td>
-            <td>Gutmann Inc</td>
-            <td>Indonesia</td>
-            <td>2/12/2021</td>
-            <td>Maroon</td>
+            <td>butlington.com</td>
+            <td>10</td>
+            <td>(650)450-8810</td>
           </tr>
           <tr>
-            <th>13</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Florida Garces</td>
             <td>Web Developer IV</td>
-            <td>Gaylord, Pacocha and Baumbach</td>
-            <td>Poland</td>
-            <td>5/31/2020</td>
-            <td>Purple</td>
+            <td>genepoint.com</td>
+            <td>100</td>
+            <td>(212) 596-1000</td>
           </tr>
           <tr>
-            <th>14</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Maribeth Popping</td>
             <td>Analyst Programmer</td>
-            <td>Deckow-Pouros</td>
-            <td>Portugal</td>
-            <td>4/27/2021</td>
-            <td>Aquamarine</td>
+            <td>grandcentral.ai</td>
+            <td>250</td>
+            <td>(212) 842-5500</td>
           </tr>
           <tr>
-            <th>15</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Moritz Dryburgh</td>
             <td>Dental Hygienist</td>
-            <td>Schiller, Cole and Hackett</td>
-            <td>Sri Lanka</td>
-            <td>8/8/2020</td>
-            <td>Crimson</td>
+            <td>techno.tech</td>
+            <td>300</td>
+            <td>(503) 521-7800</td>
           </tr>
           <tr>
-            <th>16</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Reid Semiras</td>
             <td>Teacher</td>
-            <td>Sporer, Sipes and Rogahn</td>
-            <td>Poland</td>
-            <td>7/30/2020</td>
-            <td>Green</td>
+            <td>dickenson.com</td>
+            <td>1000</td>
+            <td>(212) 842-5500</td>
           </tr>
           <tr>
-            <th>17</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Alec Lethby</td>
             <td>Teacher</td>
-            <td>Reichel, Glover and Hamill</td>
-            <td>China</td>
-            <td>2/28/2021</td>
-            <td>Khaki</td>
+            <td>uog.com</td>
+            <td>1000</td>
+            <td>(785)241-6200</td>
           </tr>
           <tr>
-            <th>18</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Aland Wilber</td>
             <td>Quality Control Specialist</td>
-            <td>Kshlerin, Rogahn and Swaniawski</td>
-            <td>Czech Republic</td>
-            <td>9/29/2020</td>
-            <td>Purple</td>
+            <td>uog.com</td>
+            <td>30000</td>
+            <td>(503) 421-7800</td>
           </tr>
           <tr>
-            <th>19</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Teddie Duerden</td>
             <td>Staff Accountant III</td>
-            <td>Pouros, Ullrich and Windler</td>
-            <td>France</td>
-            <td>10/27/2020</td>
-            <td>Aquamarine</td>
+            <td>tribal.ai</td>
+            <td>1000</td>
+            <td>+44 191 4955203</td>
           </tr>
           <tr>
-            <th>20</th>
+            <td>
+              <label>
+                <input type="checkbox" className="checkbox" />
+              </label>
+            </td>
             <td>Lorelei Blackstone</td>
             <td>Data Coordiator</td>
-            <td>Witting, Kutch and Greenfelder</td>
-            <td>Kazakhstan</td>
-            <td>6/3/2020</td>
-            <td>Red</td>
+            <td>aler.tech</td>
+            <td>1000</td>
+            <td>(650) 451-5500</td>
           </tr>
         </tbody>
         <tfoot>
@@ -203,13 +271,22 @@ function CompanyTable() {
             <th></th>
             <th>Name</th>
             <th>Job</th>
-            <th>company</th>
-            <th>location</th>
+            <th>Company</th>
+            <th>Location</th>
             <th>Last Login</th>
-            <th>Favorite Color</th>
           </tr>
         </tfoot>
       </table>
+
+      {/* Pagination */}
+      <div className="w-full flex justify-end my-4">
+        <div className="join grid grid-cols-2">
+          <button className="join-item btn btn-sm btn-outline">
+            Previous page
+          </button>
+          <button className="join-item btn btn-sm btn-outline">Next</button>
+        </div>
+      </div>
     </div>
   );
 }

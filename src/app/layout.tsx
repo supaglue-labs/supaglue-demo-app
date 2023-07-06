@@ -1,6 +1,5 @@
 import {
   BuildingOfficeIcon,
-  ChatBubbleBottomCenterTextIcon,
   Cog6ToothIcon,
   HomeIcon,
   PaperAirplaneIcon,
@@ -28,12 +27,12 @@ const navigation = [
     icon: PaperAirplaneIcon,
     current: false,
   },
-  {
-    name: "Conversations",
-    href: "/conversations",
-    icon: ChatBubbleBottomCenterTextIcon,
-    current: false,
-  },
+  // {
+  //   name: "Conversations",
+  //   href: "/conversations",
+  //   icon: ChatBubbleBottomCenterTextIcon,
+  //   current: false,
+  // },
   {
     name: "Settings",
     href: "/settings",
@@ -64,7 +63,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
-            <div className="flex h-16 shrink-0 items-center text-primary text-2xl">
+            <div className="flex h-16 shrink-0 items-center text-accent text-2xl">
               Apolla.io
             </div>
             <nav className="flex flex-1 flex-col">
@@ -92,31 +91,6 @@ export default function RootLayout({
                     ))}
                   </ul>
                 </li>
-                {/* <li>
-                  <div className="text-xs font-semibold leading-6 text-gray-400">
-                    Your teams
-                  </div>
-                  <ul role="list" className="-mx-2 mt-2 space-y-1">
-                    {teams.map((team) => (
-                      <li key={team.name}>
-                        <a
-                          href={team.href}
-                          className={classNames(
-                            team.current
-                              ? "bg-gray-800 text-white"
-                              : "text-gray-400 hover:text-white hover:bg-gray-800",
-                            "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                          )}
-                        >
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                            {team.initial}
-                          </span>
-                          <span className="truncate">{team.name}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li> */}
                 <li className="-mx-6 mt-auto">
                   <a
                     href="#"
@@ -137,30 +111,6 @@ export default function RootLayout({
             </nav>
           </div>
         </div>
-
-        {/* <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 p-2.5 text-gray-400 lg:hidden"
-            // onClick={() => setSidebarOpen(true)}
-          >
-            <span className="sr-only">Open sidebar</span>
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-white">
-            Dashboard
-          </div>
-          <a href="#">
-            <span className="sr-only">Your profile</span>
-            <Image
-              width={32}
-              height={32}
-              className="h-8 w-8 rounded-full bg-gray-800"
-              src={FaceIcon}
-              alt=""
-            />
-          </a>
-        </div> */}
 
         <main className="lg:pl-72">{children}</main>
       </body>
