@@ -1,4 +1,5 @@
 import { Content } from "@/components/Content";
+import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";
 import { API_HOST, APPLICATION_ID, CUSTOMER_ID } from "@/lib/constants";
 import { DateTime } from "luxon";
@@ -16,7 +17,15 @@ function FieldMappingLabel({ providerName }: { providerName: string }) {
   );
 }
 
-function FieldPair({ name, mappedName }: { name: string; mappedName: string }) {
+function FieldPair({
+  name,
+  mappedName,
+  options = [],
+}: {
+  name: string;
+  mappedName?: string;
+  options: string[];
+}) {
   return (
     <>
       <input
@@ -29,11 +38,15 @@ function FieldPair({ name, mappedName }: { name: string; mappedName: string }) {
         <option disabled defaultValue={mappedName}>
           Salesforce field
         </option>
-        <option>{mappedName}</option>
-        <option>Marge</option>
-        <option>Bart</option>
-        <option>Lisa</option>
-        <option>Maggie</option>
+        {mappedName ? (
+          <option>{mappedName}</option>
+        ) : (
+          options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))
+        )}
       </select>
     </>
   );
@@ -67,12 +80,37 @@ export default async function Settings({
         "Content-Type": "application/json",
         "x-api-key": process.env.NEXT_PUBLIC_SUPAGLUE_API_KEY!,
       },
+      cache: "no-store",
     }
   );
 
   const objects = await standardObjectsResponse.json();
+  const objectNames = objects.standard.map((object: any) => object.name);
 
-  console.log("xxx", objects);
+  const propertiesResponses = await Promise.all(
+    objectNames.map(
+      async (objectName: string) =>
+        await fetch(
+          `${API_HOST}/mgmt/v2/customers/${CUSTOMER_ID}/connections/${connection?.id}/properties?type=standard&name=${objectName}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": process.env.NEXT_PUBLIC_SUPAGLUE_API_KEY!,
+            },
+          }
+        )
+    )
+  );
+
+  const properties = await Promise.all(
+    propertiesResponses.map(async (response: any) => await response.json())
+  );
+
+  const propertiesMap = objectNames
+    .map((objectName: string) => objectName)
+    .reduce((acc: any, objectName: string, idx: number) => {
+      return { ...acc, [objectName]: properties[idx] };
+    }, {});
 
   return (
     <>
@@ -107,20 +145,14 @@ export default async function Settings({
                     {standardObject.name}
                   </div>
                   <div className="collapse-content">
-                    <div className="grid grid-cols-2 gap-4">
-                      <FieldMappingLabel providerName={providerName} />
-                      {standardObject?.schema?.config?.fields?.map(
-                        (fieldMapping: any, idx: number) => (
-                          <FieldPair
-                            key={`fieldmapping_${idx}`}
-                            name={fieldMapping.name}
-                            mappedName={fieldMapping.mapped_name}
-                          />
-                        )
-                      )}
-                      <div></div>
-                      <button className="btn btn-primary">Save</button>
-                    </div>
+                    <FieldMappers
+                      key={`FieldMappers_${idx}`}
+                      connectionId={connection?.id}
+                      providerName={providerName}
+                      fields={standardObject?.schema?.config?.fields}
+                      propertiesMap={propertiesMap}
+                      objectName={standardObject?.name}
+                    />
                   </div>
                 </div>
               );
