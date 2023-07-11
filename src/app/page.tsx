@@ -22,7 +22,7 @@ export default function Dashboard() {
               <div className="collapse collapse-close join-item border border-base-300">
                 <input type="radio" name="my-accordion-4" />
                 <div className="collapse-title text-md font-medium flex flex-col items-center justify-center gap-6">
-                  <div className="text-neutral-content text-xl font-medium">
+                  <div className="text-neutral text-xl font-medium">
                     Your quick setup guide
                   </div>
                   <progress
