@@ -36,7 +36,10 @@ export default async function ProviderSettings({
       return { ...acc, [objectName]: properties[idx] };
     }, {});
 
-  const syncRuns = await fetchSyncRuns(objectNames);
+  const syncRuns = await fetchSyncRuns(
+    getStagingEnvObjectType(providerName),
+    objectNames
+  );
 
   const embeddedLink = getEmbeddLink(providerName);
 
