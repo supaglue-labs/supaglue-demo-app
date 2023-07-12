@@ -5,8 +5,13 @@ import { fetchSyncRuns } from "@/app/remote/fetch_sync_runs";
 import { Content } from "@/components/Content";
 import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";
-import { getEmbeddLink } from "@/lib/constants";
+import { getEmbeddLink, getStagingEnvObjectType } from "@/lib/constants";
 import { DateTime } from "luxon";
+import { ReactNode } from "react";
+
+function Header({ children }: { children: ReactNode }) {
+  return <h1 className="text-xl semi-bold underline my-2">{children}</h1>;
+}
 
 export default async function ProviderSettings({
   params: {
@@ -20,7 +25,11 @@ export default async function ProviderSettings({
   const objects = await fetchObjects(providerName);
   const objectNames = objects.map((object) => object.object_name) || [];
 
-  const properties = await fetchProperties(objectNames, providerName);
+  const properties = await fetchProperties(
+    getStagingEnvObjectType(providerName),
+    objectNames,
+    providerName
+  );
   const propertiesMap = objectNames
     .map((objectName: string) => objectName)
     .reduce((acc: any, objectName: string, idx: number) => {
@@ -38,6 +47,7 @@ export default async function ProviderSettings({
         <div className="form-control flex flex-col gap-4">
           {/* Connect */}
           <div className="max-w-md">
+            <Header>Integration Connection</Header>
             <a href={embeddedLink} target="_blank" rel="noopener noreferrer">
               {activeConnection ? (
                 <button className="btn btn-neutral">Reconnect</button>
@@ -49,6 +59,10 @@ export default async function ProviderSettings({
 
           {/* Field mapping */}
           <div className="max-w-md">
+            <Header>Field Mappings</Header>
+            {objects.length === 0 && (
+              <div className="italic">No objects for field mapping.</div>
+            )}
             <div className="join join-vertical w-full">
               {objects.map((object, idx: number) => {
                 return (
@@ -79,6 +93,10 @@ export default async function ProviderSettings({
 
           {/* Last Synced */}
           <div>
+            <Header>Sync Stats</Header>
+            {objectNames.length === 0 && (
+              <div className="italic">No objects are currently synced.</div>
+            )}
             <div className="stats stats-vertical lg:stats-horizontal shadow">
               {objectNames.map((objectName: string, idx: number) => {
                 const emptySyncRun = {

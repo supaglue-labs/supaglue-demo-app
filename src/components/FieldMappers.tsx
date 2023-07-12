@@ -1,8 +1,9 @@
 "use client";
 
-import { getHeaders } from "@/app/api/helper";
+import { getHeadersWithCustomerProvider } from "@/app/api/helper";
 import { FieldMapping } from "@/app/types";
-import { ChangeEventHandler, useState } from "react";
+import { getStagingEnvObjectType } from "@/lib/constants";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { Toast } from "./Toast";
 
@@ -23,6 +24,7 @@ function FieldPair({
   name,
   schemaMappedName,
   customerMappedName,
+  providerName,
   options = [],
   onChange,
   disabled,
@@ -30,6 +32,7 @@ function FieldPair({
   name: string;
   schemaMappedName?: string;
   customerMappedName?: string;
+  providerName: string;
   options: string[];
   onChange: ChangeEventHandler<HTMLSelectElement>;
   disabled: boolean;
@@ -44,7 +47,11 @@ function FieldPair({
       />
       <div
         className="tooltip"
-        data-tip={Boolean(schemaMappedName) && "This is set by Apolla.io"}
+        data-tip={
+          Boolean(schemaMappedName)
+            ? "This is set by Apolla.io"
+            : customerMappedName
+        }
       >
         <select
           className="select w-full max-w-xs"
@@ -52,11 +59,11 @@ function FieldPair({
           disabled={disabled}
           defaultValue={schemaMappedName ?? customerMappedName}
         >
-          <option disabled>Salesforce field</option>
+          <option disabled>{providerName} field</option>
           {schemaMappedName ? (
             <option>{schemaMappedName}</option>
           ) : (
-            options.map((option, idx) => (
+            options.map((option, idx: number) => (
               <option key={option} value={option} data-idx={idx}>
                 {option}
               </option>
@@ -79,26 +86,38 @@ export function FieldMappers({
   objectName: string;
   properties: string[];
 }) {
+  const [message, setMessage] = useState("Saved.");
   const [showToast, setShowToast] = useState(false);
 
-  const { trigger } = useSWRMutation(
+  const { trigger, error, data } = useSWRMutation(
     `/api/save-field-mappings`,
     async (url, { arg }: { arg: any }) => {
-      await fetch(url, {
+      return await fetch(url, {
         method: "PUT",
-        headers: getHeaders(),
+        headers: getHeadersWithCustomerProvider(providerName),
         body: JSON.stringify(arg),
       });
     }
   );
 
+  useEffect(() => {
+    if (data && data.ok) {
+      setMessage("Saved.");
+      setShowToast(true);
+    } else if ((data && !data.ok) || error) {
+      setMessage("Error.");
+      setShowToast(true);
+    }
+  }, [data, error]);
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <FieldMappingLabel providerName={providerName} />
-      {fields.map((fieldMapping: any, idx: number) => (
+      {fields.map((fieldMapping, idx: number) => (
         <FieldPair
           key={`FieldPair_${idx}`}
           name={fieldMapping.name}
+          providerName={providerName}
           disabled={Boolean(fieldMapping.schema_mapped_name)}
           schemaMappedName={fieldMapping.schema_mapped_name}
           customerMappedName={fieldMapping.customer_mapped_name}
@@ -113,19 +132,22 @@ export function FieldMappers({
         className="btn btn-primary"
         onClick={() => {
           trigger({
-            type: "standard",
+            type: getStagingEnvObjectType(providerName),
             name: objectName,
-            field_mappings: fields.map((fieldMapping: any) => ({
+            field_mappings: fields.map((fieldMapping) => ({
               schema_field: fieldMapping.name,
               mapped_field: fieldMapping.customer_mapped_name,
             })),
           });
-          setShowToast(true);
         }}
       >
         Save
       </button>
-      <Toast show={showToast} onClose={() => setShowToast(false)} />
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        message={message}
+      />
     </div>
   );
 }

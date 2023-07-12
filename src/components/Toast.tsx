@@ -1,7 +1,9 @@
 export function Toast({
+  message,
   show,
   onClose,
 }: {
+  message: string;
   show: boolean;
   onClose: () => void;
 }) {
@@ -11,7 +13,7 @@ export function Toast({
       onClick={onClose}
     >
       <div className="alert alert-info">
-        <span>Saved.</span>
+        <span>{message}</span>
       </div>
     </button>
   );
