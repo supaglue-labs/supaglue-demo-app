@@ -1,11 +1,11 @@
 "use client";
 
 import { getStagingActionApiProviderName } from "@/lib/constants";
+import { getHeadersWithCustomerProvider } from "@/lib/headers";
+import { LibraryPerson } from "@/types/apolla";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
-import { getHeadersWithCustomerProvider } from "../api/helper";
-import { LibraryPerson } from "../types/apolla";
 
 export default function PersonRow({
   person,
@@ -18,6 +18,11 @@ export default function PersonRow({
   const [showToast, setShowToast] = useState(false);
 
   const router = useRouter();
+
+  /**
+   * Use SWR Mutation to allow your customers to create contacts in their connected CRM.
+   * This edge function will hit api/create-crm-contact/route.ts.
+   */
   const { trigger, error, data } = useSWRMutation(
     `/api/create-crm-contact`,
     async (url, { arg }: { arg: any }) => {
@@ -83,7 +88,6 @@ export default function PersonRow({
         >
           Add
         </button>
-        <button className="btn btn-secondary btn-outline btn-xs">Call</button>
       </td>
     </tr>
   );

@@ -1,6 +1,6 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
-import { SequencesTable } from "./SequencesTable";
+import { SequencesTable } from "@/components/SequencesTable";
 
 export default function Sequences() {
   return (

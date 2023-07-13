@@ -1,7 +1,11 @@
 import { API_HOST } from "@/lib/constants";
 import { fetcher } from "@/lib/fetcher";
-import { getHeadersWithCustomerProvider } from "../../api/helper";
+import { getHeadersWithCustomerProvider } from "@/lib/headers";
 
+/**
+ * Use Supaglue's Management API to fetch the options available for their field mappings.
+ * https://docs.supaglue.com/api/v2/mgmt/properties
+ */
 export async function fetchProperties(
   objectType: string,
   objectNames: string[],

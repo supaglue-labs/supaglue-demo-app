@@ -5,7 +5,7 @@ export type FieldMapping = {
   customer_mapped_name?: string;
 };
 
-export type ObjectFieldMapping = {
+export type ObjectFieldMappings = {
   object_name: string;
   object_type: string;
   allow_additional_field_mappings: boolean;

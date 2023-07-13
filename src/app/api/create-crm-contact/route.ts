@@ -1,6 +1,10 @@
 import { API_HOST } from "@/lib/constants";
 import { NextResponse } from "next/server";
 
+/**
+ * Nextjs API Route that calls Supaglue's CRM Action API to create a contact.
+ * https://docs.supaglue.com/api/v2/crm/create-contact
+ */
 export async function POST(request: Request) {
   const data = await request?.json();
 

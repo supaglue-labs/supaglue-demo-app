@@ -1,8 +1,8 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
-import { fetchCrmContactsByEmails } from "../remote/postgres/fetch_crm_contacts";
-import { LibraryPerson } from "../types/apolla";
-import PersonRow from "./PersonRow";
+import PersonRow from "@/components/PersonRow";
+import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
+import { LibraryPerson } from "@/types/apolla";
 
 export const peopleLibrary: LibraryPerson[] = [
   {

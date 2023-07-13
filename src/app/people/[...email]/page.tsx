@@ -1,6 +1,6 @@
-import { fetchCrmContactsByEmails } from "@/app/remote/postgres/fetch_crm_contacts";
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
+import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
 import { peopleLibrary } from "../page";
 
 function Avatar() {

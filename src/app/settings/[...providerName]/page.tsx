@@ -1,11 +1,11 @@
-import { fetchActiveConnection } from "@/app/remote/supaglue/fetch_active_connection";
-import { fetchObjects } from "@/app/remote/supaglue/fetch_objects";
-import { fetchProperties } from "@/app/remote/supaglue/fetch_properties";
-import { fetchSyncRuns } from "@/app/remote/supaglue/fetch_sync_runs";
 import { Content } from "@/components/Content";
 import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";
 import { getEmbeddLink, getStagingEnvObjectType } from "@/lib/constants";
+import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
+import { fetchObjects } from "@/remote/supaglue/fetch_objects";
+import { fetchProperties } from "@/remote/supaglue/fetch_properties";
+import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
 import { DateTime } from "luxon";
 import { ReactNode } from "react";
 

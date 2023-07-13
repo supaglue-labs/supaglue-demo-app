@@ -1,8 +1,8 @@
 "use client";
 
-import { getHeadersWithCustomerProvider } from "@/app/api/helper";
-import { FieldMapping } from "@/app/types/supaglue";
 import { getStagingEnvObjectType } from "@/lib/constants";
+import { getHeadersWithCustomerProvider } from "@/lib/headers";
+import { FieldMapping } from "@/types/supaglue";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { Toast } from "./Toast";
@@ -89,6 +89,10 @@ export function FieldMappers({
   const [message, setMessage] = useState("Saved.");
   const [showToast, setShowToast] = useState(false);
 
+  /**
+   * Use SWR Mutation to allow your customers to save their field mappings to your schema.
+   * This edge function will hit api/save-field-mappings/route.ts.
+   */
   const { trigger, error, data } = useSWRMutation(
     `/api/save-field-mappings`,
     async (url, { arg }: { arg: any }) => {
