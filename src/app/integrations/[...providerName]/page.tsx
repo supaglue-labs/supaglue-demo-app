@@ -13,7 +13,7 @@ function Header({ children }: { children: ReactNode }) {
   return <h1 className="text-xl semi-bold underline my-2">{children}</h1>;
 }
 
-export default async function ProviderSettings({
+export default async function IntegrationDetails({
   params: {
     providerName: [providerName],
   },
@@ -25,6 +25,9 @@ export default async function ProviderSettings({
   const objects = await fetchObjects(providerName);
   const objectNames = objects.map((object) => object.object_name) || [];
 
+  /**
+   * Fetch all field mapping options per object
+   */
   const properties = await fetchProperties(
     getStagingEnvObjectType(providerName),
     objectNames,
@@ -36,11 +39,17 @@ export default async function ProviderSettings({
       return { ...acc, [objectName]: properties[idx] };
     }, {});
 
+  /**
+   * Fetch all sync runs per object
+   */
   const syncRuns = await fetchSyncRuns(
     getStagingEnvObjectType(providerName),
     objectNames
   );
 
+  /**
+   * Generate embedded link for customer to trigger OAuth flow
+   */
   const embeddedLink = getEmbeddLink(providerName);
 
   return (

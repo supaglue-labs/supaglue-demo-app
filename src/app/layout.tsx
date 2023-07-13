@@ -34,8 +34,8 @@ const navigation = [
   //   current: false,
   // },
   {
-    name: "Settings",
-    href: "/settings",
+    name: "Integrations",
+    href: "/integrations",
     icon: Cog6ToothIcon,
     current: false,
   },
