@@ -46,6 +46,11 @@ export async function fetchCrmContactsByEmails(
       supaglue_customer_id: CUSTOMER_ID,
       supaglue_provider_name: providerName,
 
+      //
+      // This is a Postgres Generated Column that retrieves the "email_address_type="primary_email" from Supaglue's
+      // `crm_contacts.email_addresses` JSONB array.
+      // Example: `alter table crm_contacts add column email_address text generated always as (jsonb_path_query_first(crm_contacts.email_addresses,'$[*] ? (@.email_address_type == "primary").email_address')) stored;`
+      //
       email_address: {
         in: emails.map((email) => JSON.stringify(email)), // note: generated column `email_address` has double quotes around the string at the moment
       },
