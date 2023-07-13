@@ -1,7 +1,7 @@
 import { API_HOST } from "@/lib/constants";
 import { fetcher } from "@/lib/fetcher";
-import { getHeaders } from "../api/helper";
-import { SyncRun } from "../types";
+import { getHeaders } from "../../api/helper";
+import { SyncRun } from "../../types/supaglue";
 
 export async function fetchSyncRuns(objectType: string, objectNames: string[]) {
   const syncRuns = await Promise.all(

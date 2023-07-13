@@ -1,7 +1,7 @@
 import { API_HOST } from "@/lib/constants";
 import { fetcher } from "@/lib/fetcher";
-import { getHeadersWithCustomerProvider } from "../api/helper";
-import { ObjectFieldMapping } from "../types";
+import { getHeadersWithCustomerProvider } from "../../api/helper";
+import { ObjectFieldMapping } from "../../types/supaglue";
 
 export async function fetchObjects(providerName: string) {
   const objects = await fetcher<ObjectFieldMapping[] | { errors: string[] }>(

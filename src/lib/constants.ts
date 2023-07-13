@@ -1,9 +1,13 @@
 export const CUSTOMER_ID = "john-doe";
 export const API_HOST = "https://api.staging.supaglue.io";
 export const APPLICATION_ID = "ff7c36cd-155b-41ed-8852-d2a86035f70e";
+
 // export const API_HOST = "http://localhost:8080";
 // export const APPLICATION_ID = "1b511fe8-d5d5-49ba-8d1f-545e8f3cefa1";
 
+export function getStagingActionApiProviderName() {
+  return "salesforce";
+}
 export function getStagingEnvObjectType(providerName: string) {
   const providerNameToObjectType: Record<string, string> = {
     salesforce: "standard",

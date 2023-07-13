@@ -1,7 +1,132 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
+import { fetchCrmContactsByEmails } from "../remote/postgres/fetch_crm_contacts";
+import { LibraryPerson } from "../types/apolla";
+import PersonRow from "./PersonRow";
 
-function PeopleTable() {
+export const peopleLibrary: LibraryPerson[] = [
+  {
+    name: "Avi Green",
+    title: "CFO",
+    location: "United Oil & Gas Corp.",
+    email: "agreen@uog.com",
+  },
+  {
+    name: "Siddartha Nedaerk",
+    title: "-",
+    location: "San Francisco, CA",
+    email: "sid@nedaerk.com",
+  },
+  {
+    name: "Sara Smith",
+    title: "Director of Engineering",
+    location: "San Francisco, CA",
+    email: "sara@gmail.com",
+  },
+  {
+    name: "Brice Swyre",
+    title: "SVP, Procurement",
+    location: "New York, NY",
+    email: "rose@edge.com",
+  },
+  {
+    name: "Marjy Marge",
+    title: "CFO",
+    location: "Austin, TX",
+    email: "sean@edge.com",
+  },
+  {
+    name: "Yancy Tear",
+    title: "VP, Facilities",
+    location: "Portland, Oregon",
+    email: "jroger@burlington.com",
+  },
+  {
+    name: "Irma Vasilik",
+    title: "Editor",
+    location: "New York, NY",
+    email: "irma@nytimes.com",
+  },
+  {
+    name: "Meghann Durtnal",
+    title: "Staff Accountant IV",
+    location: "Tucson, AZ",
+    email: "ajames@uog.com",
+  },
+  {
+    name: "Dorothy Durtnal",
+    title: "Staff Accountant IV",
+    location: "Tucson, AZ",
+    email: "dor@durtnal.com",
+  },
+  {
+    name: "Sammy Seston",
+    title: "Accountant I",
+    location: "Mountain View, CA",
+    email: "trypley@uog.com",
+  },
+  {
+    name: "Lesya Tinhim",
+    title: "Safety Technician IV",
+    location: "Singapore, Singapore",
+    email: "iboly@uog.com",
+  },
+  {
+    name: "Zaneta Tewkesbury",
+    title: "VP Marketing",
+    location: "Chicago, IL",
+    email: "zan@tewk.com",
+  },
+  {
+    name: "Nyssa Barrera",
+    title: "Marketing Manager",
+    location: "Chicago, IL",
+    email: "lorem@outlook.net",
+  },
+  {
+    name: "Andy Tipple",
+    title: "Librarian",
+    location: "Gateshead, Tyne and Wear NE26, UK",
+    email: "asong@uog.com",
+  },
+  {
+    name: "Sophi Biles",
+    title: "Recruiting Manager",
+    location: "Chicago, IL",
+    email: "spavlova@uog.com",
+  },
+  {
+    name: "Florida Garces",
+    title: "Web Developer IV",
+    location: "Chicago, IL",
+    email: "bond_john@grandhotels.com",
+  },
+  {
+    name: "Maribeth Popping",
+    title: "Analyst Programmer",
+    location: "Mountain View, CA",
+    email: "pat@pyramid.net",
+  },
+  {
+    name: "Moritz Dryburgh",
+    title: "Dental Hygienist",
+    location: "Singapore, Singapore",
+    email: "efrank@genepoint.com",
+  },
+  {
+    name: "Reid Semiras",
+    title: "Teacher",
+    location: "Singapore, Singapore",
+    email: "asong3@uog.com",
+  },
+];
+
+async function PeopleTable() {
+  const crmContactPageMatches = await fetchCrmContactsByEmails(
+    "salesforce",
+    peopleLibrary.map((person) => person.email)
+  );
+
   return (
     <div className="overflow-x-auto">
       {/* Menu Bar */}
@@ -22,421 +147,21 @@ function PeopleTable() {
             <th>location</th>
             <th>Email</th>
             <th>Synced to CRM</th>
+            <th>Profile</th>
             <th>Quick Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Avi Green</td>
-            <td>CFO</td>
-            <td>United Oil & Gas Corp.</td>
-            <td>agreen@uog.com</td>
-            <td>x</td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs btn-disabled">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Siddartha Nedaerk</td>
-            <td>-</td>
-            <td>San Francisco, CA</td>
-            <td>sid@nedaerk.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Brice Swyre</td>
-            <td>SVP, Procurement</td>
-            <td>New York, NY</td>
-            <td>rose@edge.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Marjy Ferencz</td>
-            <td>CFO</td>
-            <td>Austin, TX</td>
-            <td>sean@edge.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Yancy Tear</td>
-            <td>VP, Facilities</td>
-            <td>Portland, Oregon</td>
-            <td>jrogers@burlington.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Irma Vasilik</td>
-            <td>Editor</td>
-            <td>New York, NY</td>
-            <td>barr@grandhotels.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Meghann Durtnal</td>
-            <td>Staff Accountant IV</td>
-            <td>Tucson, AZ</td>
-            <td>ajames@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Sammy Seston</td>
-            <td>Accountant I</td>
-            <td>Mountain View, CA</td>
-            <td>trypley@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Lesya Tinham</td>
-            <td>Safety Technician IV</td>
-            <td>Singapore, Singapore</td>
-            <td>ibolye@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Zaneta Tewkesbury</td>
-            <td>VP Marketing</td>
-            <td>Chicago, IL</td>
-            <td>jrogers@burlington.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Andy Tipple</td>
-            <td>Librarian</td>
-            <td>Gateshead, Tyne and Wear NE26, UK</td>
-            <td>asong@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Sophi Biles</td>
-            <td>Recruiting Manager</td>
-            <td>Chicago, IL</td>
-            <td>spavlova@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Florida Garces</td>
-            <td>Web Developer IV</td>
-            <td>Chicago, IL</td>
-            <td>bond_john@grandhotels.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </th>
-            <td>Maribeth Popping</td>
-            <td>Analyst Programmer</td>
-            <td>Mountain View, CA</td>
-            <td>pat@pyramid.net</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Moritz Dryburgh</td>
-            <td>Dental Hygienist</td>
-            <td>Singapore, Singapore</td>
-            <td>efrank@genepoint.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Reid Semiras</td>
-            <td>Teacher</td>
-            <td>Chicago, IL</td>
-            <td>asong@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Alec Lethby</td>
-            <td>Teacher</td>
-            <td>Chicago, IL</td>
-            <td>lbolye@uog.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Aland Wilber</td>
-            <td>Quality Control Specialist</td>
-            <td>New York, NY</td>
-            <td>bond_john@grandhotels.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Teddie Duerden</td>
-            <td>Staff Accountant III</td>
-            <td>New York, NY</td>
-            <td>barr_tim@grandhotels.com</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </td>
-            <td>Lorelei Blackstone</td>
-            <td>Data Coordiator</td>
-            <td>-</td>
-            <td>b.levy@expressl&t.net</td>
-            <td></td>
-            <td>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Add
-              </button>
-              <button className="btn btn-secondary btn-outline btn-xs">
-                Call
-              </button>
-            </td>
-          </tr>
+          {peopleLibrary.map((person, idx) => (
+            <PersonRow
+              key={`Person_${idx}`}
+              person={person}
+              isSynced={crmContactPageMatches.some(
+                (crmContact) => crmContact.emailAddress === person.email
+              )}
+            />
+          ))}
         </tbody>
-        <tfoot>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>title</th>
-            <th>location</th>
-            <th>Email</th>
-            <th>Synced to CRM</th>
-          </tr>
-        </tfoot>
       </table>
       {/* Pagination */}
       <div className="w-full flex justify-end my-4">

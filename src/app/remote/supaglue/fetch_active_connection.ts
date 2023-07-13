@@ -1,7 +1,7 @@
 import { API_HOST, CUSTOMER_ID } from "@/lib/constants";
 import { fetcher } from "@/lib/fetcher";
-import { getHeaders } from "../api/helper";
-import { Connection } from "../types";
+import { getHeaders } from "../../api/helper";
+import { Connection } from "../../types/supaglue";
 
 export async function fetchActiveConnection(providerName: string) {
   const connections = await fetcher<Connection[]>(

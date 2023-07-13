@@ -266,16 +266,6 @@ function CompanyTable() {
             <td>(650) 451-5500</td>
           </tr>
         </tbody>
-        <tfoot>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Company</th>
-            <th>Location</th>
-            <th>Last Login</th>
-          </tr>
-        </tfoot>
       </table>
 
       {/* Pagination */}

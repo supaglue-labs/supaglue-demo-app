@@ -1,7 +1,7 @@
 "use client";
 
 import { getHeadersWithCustomerProvider } from "@/app/api/helper";
-import { FieldMapping } from "@/app/types";
+import { FieldMapping } from "@/app/types/supaglue";
 import { getStagingEnvObjectType } from "@/lib/constants";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";

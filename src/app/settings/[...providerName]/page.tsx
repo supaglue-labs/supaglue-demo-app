@@ -1,7 +1,7 @@
-import { fetchActiveConnection } from "@/app/remote/fetch_active_connection";
-import { fetchObjects } from "@/app/remote/fetch_objects";
-import { fetchProperties } from "@/app/remote/fetch_properties";
-import { fetchSyncRuns } from "@/app/remote/fetch_sync_runs";
+import { fetchActiveConnection } from "@/app/remote/supaglue/fetch_active_connection";
+import { fetchObjects } from "@/app/remote/supaglue/fetch_objects";
+import { fetchProperties } from "@/app/remote/supaglue/fetch_properties";
+import { fetchSyncRuns } from "@/app/remote/supaglue/fetch_sync_runs";
 import { Content } from "@/components/Content";
 import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";

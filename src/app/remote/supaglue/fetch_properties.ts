@@ -1,6 +1,6 @@
 import { API_HOST } from "@/lib/constants";
 import { fetcher } from "@/lib/fetcher";
-import { getHeadersWithCustomerProvider } from "../api/helper";
+import { getHeadersWithCustomerProvider } from "../../api/helper";
 
 export async function fetchProperties(
   objectType: string,

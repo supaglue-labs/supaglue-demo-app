@@ -1,0 +1,330 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model crm_accounts {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean
+  last_modified_at        DateTime
+  name                    String?
+  description             String?
+  industry                String?
+  website                 String?
+  number_of_employees     Int?
+  addresses               Json?
+  phone_numbers           Json?
+  last_activity_at        DateTime?
+  lifecycle_stage         String?
+  owner_id                String?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model crm_annotations {
+  supaglue_application_id String? @map("_supaglue_application_id")
+  supaglue_provider_name  String? @map("_supaglue_provider_name")
+  supaglue_customer_id    String? @map("_supaglue_customer_id")
+  supaglue_emitted_at     String? @map("_supaglue_emitted_at")
+  id                      String
+  raw_data                Json?
+
+  @@ignore
+}
+
+model crm_contacts {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean
+  last_modified_at        DateTime
+  first_name              String?
+  last_name               String?
+  addresses               Json
+  email_addresses         Json
+  phone_numbers           Json
+  lifecycle_stage         String?
+  account_id              String?
+  owner_id                String?
+  last_activity_at        DateTime?
+  raw_data                Json?
+  email_address           String?   @default(dbgenerated("jsonb_path_query_first(email_addresses, '$[*]?(@.\"email_address_type\" == \"primary\").\"email_address\"'::jsonpath)"))
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model crm_events {
+  supaglue_application_id String? @map("_supaglue_application_id")
+  supaglue_provider_name  String? @map("_supaglue_provider_name")
+  supaglue_customer_id    String? @map("_supaglue_customer_id")
+  supaglue_emitted_at     String? @map("_supaglue_emitted_at")
+  id                      String
+  raw_data                Json?
+
+  @@ignore
+}
+
+model crm_leads {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean
+  last_modified_at        DateTime
+  lead_source             String?
+  title                   String?
+  company                 String?
+  first_name              String?
+  last_name               String?
+  addresses               Json?
+  email_addresses         Json?
+  phone_numbers           Json?
+  converted_date          DateTime?
+  converted_contact_id    String?
+  converted_account_id    String?
+  owner_id                String?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model crm_opportunities {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean
+  last_modified_at        DateTime
+  name                    String?
+  description             String?
+  amount                  Int?
+  stage                   String?
+  status                  String?
+  close_date              DateTime?
+  pipeline                String?
+  account_id              String?
+  owner_id                String?
+  last_activity_at        DateTime?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model crm_tasks {
+  supaglue_application_id String? @map("_supaglue_application_id")
+  supaglue_provider_name  String? @map("_supaglue_provider_name")
+  supaglue_customer_id    String? @map("_supaglue_customer_id")
+  supaglue_emitted_at     String? @map("_supaglue_emitted_at")
+  id                      String
+  raw_data                Json?
+
+  @@ignore
+}
+
+model crm_users {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean
+  last_modified_at        DateTime
+  name                    String?
+  email                   String?
+  is_active               Boolean?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model engagement_contacts {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean
+  last_modified_at        DateTime
+  first_name              String?
+  last_name               String?
+  job_title               String?
+  address                 Json?
+  email_addresses         Json
+  phone_numbers           Json
+  owner_id                String?
+  open_count              Int
+  click_count             Int
+  reply_count             Int
+  bounced_count           Int
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model engagement_mailboxes {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean   @default(false)
+  last_modified_at        DateTime
+  email                   String?
+  user_id                 String?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model engagement_sequence_states {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean   @default(false)
+  last_modified_at        DateTime
+  sequence_id             String?
+  contact_id              String?
+  mailbox_id              String?
+  state                   String?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model engagement_sequences {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean   @default(false)
+  last_modified_at        DateTime
+  owner_id                String?
+  name                    String?
+  tags                    Json?
+  num_steps               Int
+  schedule_count          Int
+  click_count             Int
+  reply_count             Int
+  open_count              Int
+  opt_out_count           Int
+  is_enabled              Boolean
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model engagement_users {
+  supaglue_application_id String    @map("_supaglue_application_id")
+  supaglue_provider_name  String    @map("_supaglue_provider_name")
+  supaglue_customer_id    String    @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime  @map("_supaglue_emitted_at")
+  id                      String
+  created_at              DateTime?
+  updated_at              DateTime?
+  is_deleted              Boolean   @default(false)
+  last_modified_at        DateTime
+  first_name              String?
+  last_name               String?
+  email                   String?
+  raw_data                Json?
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model ms_dynamics_365_sales_mailbox {
+  supaglue_application_id String   @map("_supaglue_application_id")
+  supaglue_provider_name  String   @map("_supaglue_provider_name")
+  supaglue_customer_id    String   @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
+  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data       Json     @map("_supaglue_raw_data")
+  id                      String
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model ms_dynamics_365_sales_testrecord {
+  supaglue_application_id String   @map("_supaglue_application_id")
+  supaglue_provider_name  String   @map("_supaglue_provider_name")
+  supaglue_customer_id    String   @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
+  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data       Json     @map("_supaglue_raw_data")
+  id                      String
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model salesforce_Contact {
+  supaglue_application_id String   @map("_supaglue_application_id")
+  supaglue_provider_name  String   @map("_supaglue_provider_name")
+  supaglue_customer_id    String   @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
+  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data       Json     @map("_supaglue_raw_data")
+  id                      String
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model salesforce_Opportunity {
+  supaglue_application_id String   @map("_supaglue_application_id")
+  supaglue_provider_name  String   @map("_supaglue_provider_name")
+  supaglue_customer_id    String   @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
+  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data       Json     @map("_supaglue_raw_data")
+  id                      String
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model salesforce_case {
+  supaglue_application_id String   @map("_supaglue_application_id")
+  supaglue_provider_name  String   @map("_supaglue_provider_name")
+  supaglue_customer_id    String   @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
+  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data       Json     @map("_supaglue_raw_data")
+  id                      String
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}

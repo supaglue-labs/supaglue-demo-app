@@ -31,7 +31,7 @@ export function SequencesTable() {
           {/* row 1 */}
 
           <tr
-            className="cursor-pointer hover:bg-primary-focus"
+            className="cursor-pointer hover:bg-accent-focus"
             onClick={() => {
               router.push("/sequences/stage-based-targeting-at-risk-customers");
             }}
