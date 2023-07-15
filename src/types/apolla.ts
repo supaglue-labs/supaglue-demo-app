@@ -3,6 +3,10 @@ export type CrmContact = {
   firstName: string;
   lastName: string;
   emailAddress: string;
+  phoneNumbers: any[];
+  addresses: any[];
+  lastActivityAt: Date | null;
+  lifecycleStage: string | null;
 };
 
 export type LibraryPerson = {

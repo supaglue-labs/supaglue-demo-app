@@ -4,7 +4,7 @@ import { getStagingActionApiProviderName } from "@/lib/constants";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
 import { LibraryPerson } from "@/types/apolla";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useSWRMutation from "swr/mutation";
 
 export default function PersonRow({
@@ -14,9 +14,6 @@ export default function PersonRow({
   person: LibraryPerson;
   isSynced: boolean;
 }) {
-  const [message, setMessage] = useState("Created Contact.");
-  const [showToast, setShowToast] = useState(false);
-
   const router = useRouter();
 
   /**
@@ -38,13 +35,11 @@ export default function PersonRow({
 
   useEffect(() => {
     if (data && data.ok) {
-      setMessage("Created Contact.");
-      setShowToast(true);
+      router.refresh();
     } else if ((data && !data.ok) || error) {
-      setMessage("Error.");
-      setShowToast(true);
+      router.refresh();
     }
-  }, [data, error]);
+  }, [router, data, error]);
 
   return (
     <tr>

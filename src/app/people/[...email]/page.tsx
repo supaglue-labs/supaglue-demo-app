@@ -59,9 +59,10 @@ export default async function Person({
   ]);
 
   const person = peopleLibrary.find((contact) => contact.email === activeEmail);
-  const isSynced = crmContacts.some(
+  const crmContact = crmContacts.find(
     (crmContact) => crmContact.emailAddress === activeEmail
   );
+  const isSynced = Boolean(crmContact);
   return (
     <>
       <Nav title="Person" />
@@ -73,6 +74,10 @@ export default async function Person({
           <div>
             <Field label="Name" field={person?.name} />
             <Field label="Email" field={person?.email} />
+            <Field
+              label="Phone Numbers"
+              field={crmContact?.phoneNumbers.toString()}
+            />
             <CheckBox isSynced={isSynced} />
           </div>
         </div>
