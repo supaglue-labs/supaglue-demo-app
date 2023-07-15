@@ -13,17 +13,34 @@ function Avatar() {
   );
 }
 
-function Field({ label = "", field = "" }: { label: string; field?: string }) {
+function Field({
+  label = "",
+  field = "",
+  showCrmBadge = false,
+  className,
+}: {
+  label: string;
+  field?: string;
+  showCrmBadge?: boolean;
+  className?: string;
+}) {
   return (
-    <div className="form-control w-full max-w-xs">
+    <div className={`form-control w-full ${className}`}>
       <label className="label">
-        <span className="label-text">{label}</span>
+        <div className="label-text gap-2 flex items-center w-full">
+          {label}
+          {showCrmBadge && (
+            <div className="badge badge-accent badge-xs badge-outline">
+              CRM data
+            </div>
+          )}
+        </div>
       </label>
       <input
         type="text"
         placeholder="Type here"
         disabled
-        className="input input-bordered w-full max-w-xs"
+        className="input input-bordered w-full"
         defaultValue={field}
       />
     </div>
@@ -74,12 +91,34 @@ export default async function Person({
           <div>
             <Field label="Name" field={person?.name} />
             <Field label="Email" field={person?.email} />
-            <Field
-              label="Phone Numbers"
-              field={crmContact?.phoneNumbers.toString()}
-            />
             <CheckBox isSynced={isSynced} />
           </div>
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          <div></div>
+        </div>
+
+        <Field
+          className="w-full"
+          label="Address"
+          field={`${crmContact?.addresses[0]?.street_1} ${crmContact?.addresses[0]?.city}, ${crmContact?.addresses[0]?.state} ${crmContact?.addresses[0]?.country}`}
+          showCrmBadge={true}
+        />
+        <div className="w-full">
+          <label className="label">
+            <div className="label-text gap-2 flex items-center w-full">
+              Other
+              <div className="badge badge-accent badge-xs badge-outline">
+                CRM data
+              </div>
+            </div>
+          </label>
+          <textarea
+            disabled
+            rows={15}
+            className="w-full textarea textarea-bordered"
+            defaultValue={JSON.stringify(crmContact?.rawData, null, 3)}
+          ></textarea>
         </div>
       </Content>
     </>

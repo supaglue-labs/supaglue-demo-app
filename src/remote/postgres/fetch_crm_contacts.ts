@@ -12,6 +12,7 @@ function mapToApollaCrmContact(crmContact: {
   addresses: Prisma.JsonValue;
   last_activity_at: Date | null;
   lifecycle_stage: string | null;
+  raw_data: Prisma.JsonValue;
 }): CrmContact {
   return {
     id: crmContact.id as string,
@@ -39,6 +40,7 @@ function mapToApollaCrmContact(crmContact: {
       : [],
     lastActivityAt: crmContact.last_activity_at,
     lifecycleStage: crmContact.lifecycle_stage,
+    rawData: crmContact.raw_data,
   };
 }
 
@@ -59,6 +61,7 @@ export async function fetchCrmContactsByEmails(
       addresses: true,
       last_activity_at: true,
       lifecycle_stage: true,
+      raw_data: true,
     },
     where: {
       //

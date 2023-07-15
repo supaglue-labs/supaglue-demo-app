@@ -7,6 +7,7 @@ export type CrmContact = {
   addresses: any[];
   lastActivityAt: Date | null;
   lifecycleStage: string | null;
+  rawData?: any;
 };
 
 export type LibraryPerson = {
