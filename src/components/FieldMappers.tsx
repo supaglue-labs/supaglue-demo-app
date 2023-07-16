@@ -88,6 +88,7 @@ export function FieldMappers({
 }) {
   const [message, setMessage] = useState("Saved.");
   const [showToast, setShowToast] = useState(false);
+  const [shouldFullRefresh, setShouldFullRefresh] = useState(false);
 
   /**
    * Use SWR Mutation to allow your customers to save their field mappings to your schema.
@@ -104,6 +105,25 @@ export function FieldMappers({
     }
   );
 
+  /**
+   * Use SWR Mutation to trigger a full refresh of the respective object after field mapping changes.
+   * This edge function will hit api/save-field-mappings/route.ts.
+   */
+  const {
+    trigger: triggerFullRefresh,
+    error: fullRefreshError,
+    data: fullRefreshData,
+  } = useSWRMutation(
+    `/api/trigger-full-refresh`,
+    async (url, { arg }: { arg: any }) => {
+      return await fetch(url, {
+        method: "POST",
+        headers: getHeadersWithCustomerProvider(providerName),
+        body: JSON.stringify(arg),
+      });
+    }
+  );
+
   useEffect(() => {
     if (data && data.ok) {
       setMessage("Saved.");
@@ -113,6 +133,10 @@ export function FieldMappers({
       setShowToast(true);
     }
   }, [data, error]);
+
+  const hasAnyCustomerMappedFields = fields.some(
+    (fieldMapping) => !fieldMapping.schema_mapped_name
+  ); // TODO: make this explicit in data model
 
   return (
     <div className="grid grid-cols-2 gap-4">
@@ -125,28 +149,55 @@ export function FieldMappers({
           disabled={Boolean(fieldMapping.schema_mapped_name)}
           schemaMappedName={fieldMapping.schema_mapped_name}
           customerMappedName={fieldMapping.customer_mapped_name}
-          options={[undefined, ...properties]}
+          options={properties}
           onChange={(event) => {
             fields[idx].customer_mapped_name = event.target.value;
           }}
         />
       ))}
       <div></div>
-      <button
-        className="btn btn-primary"
-        onClick={() => {
-          trigger({
-            type: getStagingEnvObjectType(providerName),
-            name: objectName,
-            field_mappings: fields.map((fieldMapping) => ({
-              schema_field: fieldMapping.name,
-              mapped_field: fieldMapping.customer_mapped_name,
-            })),
-          });
-        }}
-      >
-        Save
-      </button>
+      <div className="flex flex-col">
+        {/* Full Refresh Checkbox */}
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Refresh data on save</span>
+            <input
+              type="checkbox"
+              disabled={!hasAnyCustomerMappedFields}
+              checked={shouldFullRefresh}
+              className="checkbox"
+              onClick={() => {
+                setShouldFullRefresh(!shouldFullRefresh);
+              }}
+            />
+          </label>
+        </div>
+
+        {/* Save Button */}
+        <button
+          className="btn btn-primary btn-sm"
+          disabled={!hasAnyCustomerMappedFields}
+          onClick={() => {
+            trigger({
+              type: getStagingEnvObjectType(providerName),
+              name: objectName,
+              field_mappings: fields.map((fieldMapping) => ({
+                schema_field: fieldMapping.name,
+                mapped_field: fieldMapping.customer_mapped_name,
+              })),
+            });
+            if (shouldFullRefresh) {
+              triggerFullRefresh({
+                object_type: "common", // TODO: fix standard. we're utilizing common right now.
+                object: objectName.toLowerCase(), // TODO: make API case insensitive
+                perform_full_refresh: true,
+              });
+            }
+          }}
+        >
+          Save
+        </button>
+      </div>
       <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
