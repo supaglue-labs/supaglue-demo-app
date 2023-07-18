@@ -168,9 +168,9 @@ function SequenceAccordion() {
 
             <p className="text-sm color-base-300 m-4 italic">
               Hi &#123;first_name&#125;, Are you still interested in getting
-              more out of &#60;insert your company name&#62;? Let's discuss how
-              to accelerate towards your &#123;now_year&#125; goals! Feel free
-              to find a time that works for you here: &#60;add link to your
+              more out of &#60;insert your company name&#62;? Let&apos;s discuss
+              how to accelerate towards your &#123;now_year&#125; goals! Feel
+              free to find a time that works for you here: &#60;add link to your
               calendar scheduler&#62; Best, &#123;sender_first_name&#125;
             </p>
           </div>
