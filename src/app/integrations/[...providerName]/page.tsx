@@ -1,7 +1,8 @@
+import { ConnectPane } from "@/components/ConnectButton";
 import { Content } from "@/components/Content";
 import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";
-import { getEmbeddLink, getStagingEnvObjectType } from "@/lib/constants";
+import { getStagingEnvObjectType } from "@/lib/constants";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
 import { fetchObjects } from "@/remote/supaglue/fetch_objects";
 import { fetchProperties } from "@/remote/supaglue/fetch_properties";
@@ -47,11 +48,6 @@ export default async function IntegrationDetails({
     objectNames
   );
 
-  /**
-   * Generate embedded link for customer to trigger OAuth flow
-   */
-  const embeddedLink = getEmbeddLink(providerName);
-
   return (
     <>
       <Nav title={`Settings - Configure (${providerName})`} />
@@ -60,13 +56,10 @@ export default async function IntegrationDetails({
           {/* Connect */}
           <div className="max-w-md">
             <Header>Integration Connection</Header>
-            <a href={embeddedLink} target="_blank" rel="noopener noreferrer">
-              {activeConnection ? (
-                <button className="btn btn-neutral">Reconnect</button>
-              ) : (
-                <button className="btn btn-primary">Connect</button>
-              )}
-            </a>
+            <ConnectPane
+              providerName={providerName}
+              activeConnection={activeConnection}
+            />
           </div>
 
           {/* Field mapping */}
