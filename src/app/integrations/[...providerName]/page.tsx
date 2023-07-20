@@ -120,10 +120,11 @@ export default async function IntegrationDetails({
 
                 return (
                   <div className="stat" key={`Stat_${idx}`}>
-                    <div className="stat-title">Synced ({objectName})</div>
+                    <div className="stat-title">Last synced ({objectName})</div>
                     <div className="stat-value">
-                      {syncRun.results[0].num_records_synced ||
-                        syncRun.results[0].status}
+                      {syncRun.results[0].num_records_synced !== undefined
+                        ? syncRun.results[0].num_records_synced
+                        : syncRun.results[0].status}
                     </div>
                     <div className="stat-desc">
                       records on{" "}

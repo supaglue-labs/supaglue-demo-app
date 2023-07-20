@@ -19,8 +19,8 @@ export function getEmbeddLink(providerName: string, scope?: string) {
 // BEGIN: Hardcoded constants for Supaglue's demo purposes
 //
 export const CUSTOMER_ID = "john-doe";
-export const API_HOST = "https://api.staging.supaglue.io";
-export const APPLICATION_ID = "ff7c36cd-155b-41ed-8852-d2a86035f70e";
+export const API_HOST = "https://api.supaglue.io";
+export const APPLICATION_ID = "4d9971de-773c-482c-b0a9-7545667dab46";
 export const STAGING_MS_DYNAMICS_365_SALES_SCOPE =
   "https://org8d6f84ed.crm.dynamics.com/.default";
 // export const API_HOST = "http://localhost:8080";
@@ -30,7 +30,7 @@ export function getStagingActionApiProviderName() {
 }
 export function getStagingEnvObjectType(providerName: string) {
   const providerNameToObjectType: Record<string, string> = {
-    salesforce: "standard",
+    salesforce: "common",
     pipedrive: "common",
     hubspot: "standard",
   };

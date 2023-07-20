@@ -166,7 +166,7 @@ export function FieldMappers({
               disabled={!hasAnyCustomerMappedFields}
               checked={shouldFullRefresh}
               className="checkbox"
-              onClick={() => {
+              onChange={() => {
                 setShouldFullRefresh(!shouldFullRefresh);
               }}
             />
