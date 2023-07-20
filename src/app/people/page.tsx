@@ -121,7 +121,12 @@ export const peopleLibrary: LibraryPerson[] = [
   },
 ];
 
+import { cookies } from "next/headers";
+
 async function PeopleTable() {
+  // Note: force Dynamic Rendering
+  const cookieStore = cookies();
+
   const crmContactPageMatches = await fetchCrmContactsByEmails(
     "salesforce",
     peopleLibrary.map((person) => person.email)
