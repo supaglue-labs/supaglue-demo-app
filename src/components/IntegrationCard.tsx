@@ -17,9 +17,9 @@ export default function IntegrationCard({
   cta?: string;
 }) {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <figure>
-        <Image alt={`${name} icon`} src={icon} width={50} height={50}></Image>
+    <div className="card w-72 bg-base-100 shadow-xl">
+      <figure className="mt-8">
+        <Image alt={`${name} icon`} src={icon} width={25} height={25}></Image>
       </figure>
       <div className="card-body">
         <h2 className="card-title">
@@ -28,7 +28,7 @@ export default function IntegrationCard({
         <p>{description}</p>
         <div className="card-actions justify-end">
           <Link href={link}>
-            <button className="btn btn-primary">{cta}</button>
+            <button className="btn btn-primary btn-sm">{cta}</button>
           </Link>
         </div>
       </div>
