@@ -96,6 +96,11 @@ export default async function IntegrationDetails({
             </div>
           </div>
 
+          <div>
+            <Header>Settings</Header>
+            <button className="btn">Trigger refresh</button>
+          </div>
+
           {/* Last Synced */}
           <div>
             <Header>Sync Stats</Header>

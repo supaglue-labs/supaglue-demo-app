@@ -33,7 +33,7 @@ function FieldPair({
   schemaMappedName?: string;
   customerMappedName?: string;
   providerName: string;
-  options: string[];
+  options: { id: string; label: string }[];
   onChange: ChangeEventHandler<HTMLSelectElement>;
   disabled: boolean;
 }) {
@@ -63,11 +63,15 @@ function FieldPair({
           {schemaMappedName ? (
             <option>{schemaMappedName}</option>
           ) : (
-            options.map((option, idx: number) => (
-              <option key={option} value={option} data-idx={idx}>
-                {option}
-              </option>
-            ))
+            options
+              .sort((a, b) => {
+                return ("" + a.label).localeCompare(b.label);
+              })
+              .map((option, idx: number) => (
+                <option key={option.id} value={option.id} data-idx={idx}>
+                  {option.label} ({option.id})
+                </option>
+              ))
           )}
         </select>
       </div>
@@ -84,7 +88,7 @@ export function FieldMappers({
   providerName: string;
   fields: FieldMapping[];
   objectName: string;
-  properties: string[];
+  properties: { id: string; label: string }[];
 }) {
   const [message, setMessage] = useState("Saved.");
   const [showToast, setShowToast] = useState(false);
