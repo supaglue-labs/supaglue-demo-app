@@ -23,7 +23,7 @@ export default function PersonRow({
    * Use SWR Mutation to allow your customers to create contacts in their connected CRM.
    * This edge function will hit api/create-crm-contact/route.ts.
    */
-  const { trigger, error, data } = useSWRMutation(
+  const { trigger, error, data, isMutating } = useSWRMutation(
     `/api/create-crm-contact`,
     async (url, { arg }: { arg: any }) => {
       return await fetch(url, {
@@ -67,7 +67,7 @@ export default function PersonRow({
       </td>
       <td>
         <button
-          className={`btn btn-secondary btn-outline btn-xs ${
+          className={`min-w-[3rem] btn btn-secondary btn-outline btn-xs ${
             isSynced ? "btn-disabled" : ""
           }`}
           onClick={() => {
@@ -85,7 +85,11 @@ export default function PersonRow({
             });
           }}
         >
-          Add
+          {isMutating ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            "Add"
+          )}
         </button>
       </td>
     </tr>
