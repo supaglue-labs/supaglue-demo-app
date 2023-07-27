@@ -1,6 +1,7 @@
 "use client";
 
-import { getStagingEnvObjectType } from "@/lib/constants";
+import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { DATA_MODEL } from "@/lib/env";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
 import { FieldMapping } from "@/types/supaglue";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -93,6 +94,7 @@ export function FieldMappers({
   const [message, setMessage] = useState("Saved.");
   const [showToast, setShowToast] = useState(false);
   const [shouldFullRefresh, setShouldFullRefresh] = useState(false);
+  const activeCustomer = useCustomerContext();
 
   /**
    * Use SWR Mutation to allow your customers to save their field mappings to your schema.
@@ -103,7 +105,10 @@ export function FieldMappers({
     async (url, { arg }: { arg: any }) => {
       return await fetch(url, {
         method: "PUT",
-        headers: getHeadersWithCustomerProvider(providerName),
+        headers: getHeadersWithCustomerProvider(
+          activeCustomer.id,
+          providerName
+        ),
         body: JSON.stringify(arg),
       });
     }
@@ -122,7 +127,10 @@ export function FieldMappers({
     async (url, { arg }: { arg: any }) => {
       return await fetch(url, {
         method: "POST",
-        headers: getHeadersWithCustomerProvider(providerName),
+        headers: getHeadersWithCustomerProvider(
+          activeCustomer.id,
+          providerName
+        ),
         body: JSON.stringify(arg),
       });
     }
@@ -183,7 +191,7 @@ export function FieldMappers({
           disabled={!hasAnyCustomerMappedFields}
           onClick={() => {
             trigger({
-              type: getStagingEnvObjectType(providerName),
+              type: DATA_MODEL,
               name: objectName,
               field_mappings: fields.map((fieldMapping) => ({
                 schema_field: fieldMapping.name,
@@ -192,7 +200,7 @@ export function FieldMappers({
             });
             if (shouldFullRefresh) {
               triggerFullRefresh({
-                object_type: "common", // TODO: fix standard. we're utilizing common right now.
+                object_type: DATA_MODEL,
                 object: objectName.toLowerCase(), // TODO: make API case insensitive
                 perform_full_refresh: true,
               });

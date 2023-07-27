@@ -1,6 +1,8 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
+import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
+import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
 import { peopleLibrary } from "../page";
 
 function Avatar() {
@@ -70,10 +72,14 @@ export default async function Person({
 }: {
   params: { email: string[] };
 }) {
+  const activeCustomer = useCustomerContext();
+  const activeConnection = await fetchActiveConnection(activeCustomer.id);
   const activeEmail = decodeURIComponent(email);
-  const crmContacts = await fetchCrmContactsByEmails("salesforce", [
-    activeEmail,
-  ]);
+  const crmContacts = await fetchCrmContactsByEmails(
+    activeCustomer.id,
+    activeConnection.provider_name,
+    [activeEmail]
+  );
 
   const person = peopleLibrary.find((contact) => contact.email === activeEmail);
   const crmContact = crmContacts.find(

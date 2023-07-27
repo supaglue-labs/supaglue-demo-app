@@ -1,4 +1,4 @@
-import { API_HOST } from "@/lib/constants";
+import { API_HOST } from "@/lib/env";
 import { fetcher } from "@/lib/fetcher";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
 
@@ -7,6 +7,7 @@ import { getHeadersWithCustomerProvider } from "@/lib/headers";
  * https://docs.supaglue.com/api/v2/mgmt/properties
  */
 export async function fetchProperties(
+  customerId: string,
   objectType: string,
   objectNames: string[],
   providerName: string
@@ -17,7 +18,7 @@ export async function fetchProperties(
         await fetcher<{ properties: string[] }>(
           `${API_HOST}/mgmt/v2/properties?type=${objectType}&name=${objectName}`,
           {
-            headers: getHeadersWithCustomerProvider(providerName),
+            headers: getHeadersWithCustomerProvider(customerId, providerName),
           }
         )
     )

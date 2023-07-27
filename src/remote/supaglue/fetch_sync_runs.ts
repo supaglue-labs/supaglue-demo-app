@@ -1,4 +1,4 @@
-import { API_HOST } from "@/lib/constants";
+import { API_HOST } from "@/lib/env";
 import { fetcher } from "@/lib/fetcher";
 import { getHeaders } from "@/lib/headers";
 import { SyncRun } from "@/types/supaglue";

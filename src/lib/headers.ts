@@ -1,5 +1,3 @@
-import { CUSTOMER_ID } from "@/lib/constants";
-
 export function getHeaders() {
   return {
     "Content-Type": "application/json",
@@ -7,11 +5,14 @@ export function getHeaders() {
   };
 }
 
-export function getHeadersWithCustomerProvider(providerName: string) {
+export function getHeadersWithCustomerProvider(
+  customerId: string,
+  providerName: string
+) {
   return {
     "Content-Type": "application/json",
     "x-api-key": process.env.NEXT_PUBLIC_SUPAGLUE_API_KEY!,
-    "x-customer-id": CUSTOMER_ID,
+    "x-customer-id": customerId,
     "x-provider-name": providerName,
   };
 }

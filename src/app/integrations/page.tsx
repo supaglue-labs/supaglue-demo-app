@@ -20,11 +20,13 @@ import ZohoCrmIcon from "@/assets/connector_icons/zoho_crm.png";
 import { Content } from "@/components/Content";
 import IntegrationCard from "@/components/IntegrationCard";
 import { Nav } from "@/components/Nav";
-import { API_HOST, CUSTOMER_ID } from "@/lib/constants";
+import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { API_HOST } from "@/lib/env";
 
 export default async function Integrations() {
+  const activeCustomer = useCustomerContext();
   const response = await fetch(
-    `${API_HOST}/mgmt/v2/customers/${CUSTOMER_ID}/connections`,
+    `${API_HOST}/mgmt/v2/customers/${activeCustomer.id}/connections`,
     {
       headers: {
         "Content-Type": "application/json",

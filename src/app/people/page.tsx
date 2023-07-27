@@ -1,7 +1,9 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import PersonRow from "@/components/PersonRow";
+import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
+import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
 import { LibraryPerson } from "@/types/apolla";
 
 export const peopleLibrary: LibraryPerson[] = [
@@ -127,8 +129,12 @@ async function PeopleTable() {
   // Note: force Dynamic Rendering
   const cookieStore = cookies();
 
+  const activeCustomer = useCustomerContext();
+  const activeConnection = await fetchActiveConnection(activeCustomer.id);
+
   const crmContactPageMatches = await fetchCrmContactsByEmails(
-    "salesforce",
+    activeCustomer.id,
+    activeConnection.provider_name,
     peopleLibrary.map((person) => person.email)
   );
 
@@ -161,6 +167,7 @@ async function PeopleTable() {
             <PersonRow
               key={`Person_${idx}`}
               person={person}
+              providerName={activeConnection.provider_name}
               isSynced={crmContactPageMatches.some(
                 (crmContact) => crmContact.emailAddress === person.email
               )}

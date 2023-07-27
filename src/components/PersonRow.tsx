@@ -1,6 +1,6 @@
 "use client";
 
-import { getStagingActionApiProviderName } from "@/lib/constants";
+import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
 import { LibraryPerson } from "@/types/apolla";
 import { useRouter } from "next/navigation";
@@ -10,11 +10,14 @@ import useSWRMutation from "swr/mutation";
 export default function PersonRow({
   person,
   isSynced,
+  providerName,
 }: {
   person: LibraryPerson;
   isSynced: boolean;
+  providerName: string;
 }) {
   const router = useRouter();
+  const activeCustomer = useCustomerContext();
 
   /**
    * Use SWR Mutation to allow your customers to create contacts in their connected CRM.
@@ -26,7 +29,8 @@ export default function PersonRow({
       return await fetch(url, {
         method: "POST",
         headers: getHeadersWithCustomerProvider(
-          getStagingActionApiProviderName()
+          activeCustomer.id,
+          providerName
         ),
         body: JSON.stringify(arg),
       });

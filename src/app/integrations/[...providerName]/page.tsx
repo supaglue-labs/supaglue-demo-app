@@ -1,14 +1,17 @@
-import { ConnectPane } from "@/components/ConnectButton";
+import { ConnectPanel } from "@/components/ConnectPanel";
 import { Content } from "@/components/Content";
 import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";
-import { getStagingEnvObjectType } from "@/lib/constants";
-import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
+import { DATA_MODEL } from "@/lib/env";
+import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
 import { fetchObjects } from "@/remote/supaglue/fetch_objects";
 import { fetchProperties } from "@/remote/supaglue/fetch_properties";
 import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
 import { DateTime } from "luxon";
 import { ReactNode } from "react";
+
+import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { cookies } from "next/headers";
 
 function Header({ children }: { children: ReactNode }) {
   return <h1 className="text-xl semi-bold underline my-2">{children}</h1>;
@@ -21,16 +24,24 @@ export default async function IntegrationDetails({
 }: {
   params: { providerName: string[] };
 }) {
-  const activeConnection = await fetchActiveConnection(providerName);
+  // Note: force Dynamic Rendering
+  const cookieStore = cookies();
 
-  const objects = await fetchObjects(providerName);
+  const activeCustomer = useCustomerContext();
+  const currentConnection = await fetchConnectionForProvider(
+    activeCustomer.id,
+    providerName
+  );
+
+  const objects = await fetchObjects(activeCustomer.id, providerName);
   const objectNames = objects.map((object) => object.object_name) || [];
 
   /**
    * Fetch all field mapping options per object
    */
   const properties = await fetchProperties(
-    getStagingEnvObjectType(providerName),
+    activeCustomer.id,
+    DATA_MODEL,
     objectNames,
     providerName
   );
@@ -43,10 +54,7 @@ export default async function IntegrationDetails({
   /**
    * Fetch all sync runs per object
    */
-  const syncRuns = await fetchSyncRuns(
-    getStagingEnvObjectType(providerName),
-    objectNames
-  );
+  const syncRuns = await fetchSyncRuns(DATA_MODEL, objectNames);
 
   return (
     <>
@@ -56,9 +64,10 @@ export default async function IntegrationDetails({
           {/* Connect */}
           <div className="max-w-md">
             <Header>Integration Connection</Header>
-            <ConnectPane
+            <ConnectPanel
+              customerId={activeCustomer.id}
               providerName={providerName}
-              activeConnection={activeConnection}
+              activeConnection={currentConnection}
             />
           </div>
 
@@ -94,11 +103,6 @@ export default async function IntegrationDetails({
                 );
               })}
             </div>
-          </div>
-
-          <div>
-            <Header>Settings</Header>
-            <button className="btn">Trigger refresh</button>
           </div>
 
           {/* Last Synced */}

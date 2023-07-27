@@ -1,4 +1,4 @@
-import { API_HOST } from "@/lib/constants";
+import { API_HOST } from "@/lib/env";
 import { NextResponse } from "next/server";
 
 /**
@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
  * https://docs.supaglue.com/api/v2/crm/create-contact
  */
 export async function POST(request: Request) {
-  const data = await request?.json();
+  const data = await request.json();
 
   const res = await fetch(`${API_HOST}/crm/v2/contacts`, {
     method: "POST",

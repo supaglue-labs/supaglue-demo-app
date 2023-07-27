@@ -1,4 +1,4 @@
-import { APPLICATION_ID, CUSTOMER_ID } from "@/lib/constants";
+import { APPLICATION_ID } from "@/lib/env";
 import { CrmContact } from "@/types/apolla";
 import { Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
@@ -48,6 +48,7 @@ function mapToApollaCrmContact(crmContact: {
  * Use Prisma to retrieve CRM Contacts synced to your Postgres by Supaglue.
  */
 export async function fetchCrmContactsByEmails(
+  customerId: string,
   providerName: string,
   emails: string[]
 ): Promise<CrmContact[]> {
@@ -68,7 +69,7 @@ export async function fetchCrmContactsByEmails(
       // Supaglue partitions your customer data in destination tables by {application_id, customer_id, provider_name}.
       //
       supaglue_application_id: APPLICATION_ID,
-      supaglue_customer_id: CUSTOMER_ID,
+      supaglue_customer_id: customerId,
       supaglue_provider_name: providerName,
 
       //

@@ -14,6 +14,7 @@ export type ObjectFieldMappings = {
 };
 
 export type Connection = {
+  id: string;
   provider_name: string;
 };
 

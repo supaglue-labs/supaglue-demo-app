@@ -8,7 +8,10 @@ import { Connection } from "@/types/supaglue";
  * Each connection represents a connection to a third-party provider.
  * https://docs.supaglue.com/api/v2/mgmt/get-connections
  */
-export async function fetchActiveConnection(customerId: string) {
+export async function fetchConnectionForProvider(
+  customerId: string,
+  providerName: string
+) {
   const connections = await fetcher<Connection[]>(
     `${API_HOST}/mgmt/v2/customers/${customerId}/connections`,
     {
@@ -16,5 +19,9 @@ export async function fetchActiveConnection(customerId: string) {
     }
   );
 
-  return connections[0];
+  const activeConnection = connections.find(
+    (connection) => connection.provider_name === providerName
+  );
+
+  return activeConnection;
 }
