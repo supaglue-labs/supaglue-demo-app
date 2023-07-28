@@ -1,3 +1,8 @@
+export type Property = {
+  id: string;
+  label: string;
+};
+
 export type FieldMapping = {
   name: string;
   is_added_by_customer: string;

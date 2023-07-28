@@ -1,16 +1,17 @@
 import { ConnectPanel } from "@/components/ConnectPanel";
 import { Content } from "@/components/Content";
-import { FieldMappers } from "@/components/FieldMappers";
 import { Nav } from "@/components/Nav";
 import { DATA_MODEL } from "@/lib/env";
 import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
 import { fetchObjects } from "@/remote/supaglue/fetch_objects";
 import { fetchProperties } from "@/remote/supaglue/fetch_properties";
 import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
-import { DateTime } from "luxon";
 import { ReactNode } from "react";
 
+import { AccordionItem } from "@/components/AccordionItem";
+import StatCard from "@/components/StatCard";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { Property } from "@/types/supaglue";
 import { cookies } from "next/headers";
 
 function Header({ children }: { children: ReactNode }) {
@@ -45,10 +46,10 @@ export default async function IntegrationDetails({
     objectNames,
     providerName
   );
-  const propertiesMap = objectNames
+  const propertiesMap: Record<string, Property[]> = objectNames
     .map((objectName: string) => objectName)
     .reduce((acc: any, objectName: string, idx: number) => {
-      return { ...acc, [objectName]: properties[idx] };
+      return { ...acc, [objectName]: properties[idx].properties };
     }, {});
 
   /**
@@ -80,26 +81,12 @@ export default async function IntegrationDetails({
             <div className="join join-vertical w-full">
               {objects.map((object, idx: number) => {
                 return (
-                  <div
-                    key={`object_${idx}`}
-                    className="collapse collapse-arrow join-item border border-base-300"
-                  >
-                    <input type="radio" name="my-accordion-4" />
-                    <div className="collapse-title text-xl font-medium">
-                      {object.object_name}
-                    </div>
-                    <div className="collapse-content">
-                      <FieldMappers
-                        key={`FieldMappers_${idx}`}
-                        providerName={providerName}
-                        fields={object.fields}
-                        properties={
-                          propertiesMap[object.object_name].properties || []
-                        }
-                        objectName={object.object_name}
-                      />
-                    </div>
-                  </div>
+                  <AccordionItem
+                    key={`AccordionItem_${idx}`}
+                    object={object}
+                    providerName={providerName}
+                    properties={propertiesMap[object.object_name] || []}
+                  />
                 );
               })}
             </div>
@@ -113,35 +100,16 @@ export default async function IntegrationDetails({
             )}
             <div className="stats stats-vertical lg:stats-horizontal shadow">
               {objectNames.map((objectName: string, idx: number) => {
-                const emptySyncRun = {
-                  results: [
-                    {
-                      status: "ERROR",
-                      num_records_synced: 0,
-                      end_timestamp: new Date().toISOString(),
-                    },
-                  ],
-                };
-                const syncRun =
-                  syncRuns.find(
-                    (syncRun) => syncRun.results[0]?.object === objectName
-                  ) || emptySyncRun;
+                const syncRun = syncRuns.find(
+                  (syncRun) => syncRun.results[0]?.object === objectName
+                );
 
                 return (
-                  <div className="stat" key={`Stat_${idx}`}>
-                    <div className="stat-title">Last synced ({objectName})</div>
-                    <div className="stat-value">
-                      {syncRun.results[0].num_records_synced !== undefined
-                        ? syncRun.results[0].num_records_synced
-                        : syncRun.results[0].status}
-                    </div>
-                    <div className="stat-desc">
-                      records on{" "}
-                      {DateTime.fromISO(
-                        syncRun.results[0].end_timestamp
-                      ).toLocaleString(DateTime.DATETIME_FULL)}
-                    </div>
-                  </div>
+                  <StatCard
+                    key={`StatCard_${idx}`}
+                    syncRun={syncRun}
+                    objectName={objectName}
+                  />
                 );
               })}
             </div>

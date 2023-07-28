@@ -70,7 +70,7 @@ function FieldPair({
               })
               .map((option, idx: number) => (
                 <option key={option.id} value={option.id} data-idx={idx}>
-                  {option.label} ({option.id})
+                  {option.label} ({option.id ? option.id : "Select a field"})
                 </option>
               ))
           )}
@@ -80,7 +80,7 @@ function FieldPair({
   );
 }
 
-export function FieldMappers({
+export function FieldMapper({
   providerName,
   fields,
   objectName,
@@ -150,6 +150,8 @@ export function FieldMappers({
     (fieldMapping) => !fieldMapping.schema_mapped_name
   ); // TODO: make this explicit in data model
 
+  const emptyOption = { id: "", label: "" };
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <FieldMappingLabel providerName={providerName} />
@@ -161,7 +163,7 @@ export function FieldMappers({
           disabled={Boolean(fieldMapping.schema_mapped_name)}
           schemaMappedName={fieldMapping.schema_mapped_name}
           customerMappedName={fieldMapping.customer_mapped_name}
-          options={properties}
+          options={[emptyOption, ...properties]}
           onChange={(event) => {
             fields[idx].customer_mapped_name = event.target.value;
           }}

@@ -1,6 +1,7 @@
 import { API_HOST } from "@/lib/env";
 import { fetcher } from "@/lib/fetcher";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
+import { Property } from "@/types/supaglue";
 
 /**
  * Use Supaglue's Management API to fetch the options available for their field mappings.
@@ -15,7 +16,7 @@ export async function fetchProperties(
   const properties = await Promise.all(
     objectNames.map(
       async (objectName: string) =>
-        await fetcher<{ properties: string[] }>(
+        await fetcher<{ properties: Property[] }>(
           `${API_HOST}/mgmt/v2/properties?type=${objectType}&name=${objectName}`,
           {
             headers: getHeadersWithCustomerProvider(customerId, providerName),
