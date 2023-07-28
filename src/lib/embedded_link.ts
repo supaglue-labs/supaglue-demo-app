@@ -8,7 +8,7 @@ export function getEmbeddedLink(
   providerName: string,
   scope?: string
 ) {
-  const returnUrl = "https://supaglue.com";
+  const returnUrl = "https://supaglue-demo-app.vercel.app/integrations";
 
   const params = new URLSearchParams({
     applicationId: APPLICATION_ID,
