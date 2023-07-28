@@ -2,17 +2,17 @@
 
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
-import { PersonProspect } from "@/types/apolla";
+import { CompanyProspect } from "@/types/apolla";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useSWRMutation from "swr/mutation";
 
-export default function PersonRow({
-  person,
+export default function CompanyRow({
+  company,
   isSynced,
   providerName,
 }: {
-  person: PersonProspect;
+  company: CompanyProspect;
   isSynced: boolean;
   providerName: string;
 }) {
@@ -20,11 +20,11 @@ export default function PersonRow({
   const activeCustomer = useCustomerContext();
 
   /**
-   * Use SWR Mutation to allow your customers to create contacts in their connected CRM.
-   * This edge function will hit api/create-crm-contact/route.ts.
+   * Use SWR Mutation to allow your customers to create accounts in their connected CRM.
+   * This edge function will hit api/create-crm-account/route.ts.
    */
   const { trigger, error, data, isMutating } = useSWRMutation(
-    `/api/create-crm-contact`,
+    `/api/create-crm-account`,
     async (url, { arg }: { arg: any }) => {
       return await fetch(url, {
         method: "POST",
@@ -52,19 +52,12 @@ export default function PersonRow({
           <input type="checkbox" className="checkbox" />
         </label>
       </td>
-      <td>{person.name}</td>
-      <td>{person.title}</td>
-      <td>{person.location}</td>
-      <td>{person.email}</td>
+      <td>{company.name}</td>
+      <td>{company.industry}</td>
+      <td>{company.website}</td>
+      <td>{company.numOfEmployees}</td>
+      <td>{company.phone}</td>
       <td>{isSynced ? "✅" : ""}</td>
-      <td
-        className="cursor-pointer hover:text-accent-focus underline"
-        onClick={() => {
-          router.push(`/people/${encodeURIComponent(person.email)}`);
-        }}
-      >
-        View
-      </td>
       <td>
         <button
           className={`min-w-[3rem] btn btn-secondary btn-outline btn-xs ${
@@ -73,12 +66,13 @@ export default function PersonRow({
           onClick={() => {
             trigger({
               record: {
-                first_name: person.name.split(" ")[0],
-                last_name: person.name.split(" ")[1],
-                email_addresses: [
+                name: company.name,
+                website: company.website,
+                number_of_employees: company.numOfEmployees,
+                phone_numbers: [
                   {
-                    email_address: person.email,
-                    email_address_type: "primary",
+                    phone_number: company.phone,
+                    phone_number_type: "primary",
                   },
                 ],
               },

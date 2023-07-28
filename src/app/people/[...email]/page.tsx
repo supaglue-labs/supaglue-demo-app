@@ -1,9 +1,9 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { peopleProspects } from "@/lib/prospects_database";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
-import { peopleLibrary } from "../page";
 
 function Avatar() {
   return (
@@ -81,7 +81,9 @@ export default async function Person({
     [activeEmail]
   );
 
-  const person = peopleLibrary.find((contact) => contact.email === activeEmail);
+  const person = peopleProspects.find(
+    (contact) => contact.email === activeEmail
+  );
   const crmContact = crmContacts.find(
     (crmContact) => crmContact.emailAddress === activeEmail
   );

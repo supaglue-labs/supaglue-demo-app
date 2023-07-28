@@ -10,9 +10,26 @@ export type CrmContact = {
   rawData?: any;
 };
 
-export type LibraryPerson = {
+export type CrmAccount = {
+  id: string;
+  name: string;
+  website: string;
+  industry: string;
+  phoneNumbers: any[];
+  rawData?: any;
+};
+
+export type PersonProspect = {
   name: string;
   title: string;
   location: string;
   email: string;
+};
+
+export type CompanyProspect = {
+  name: string;
+  industry: string;
+  website: string;
+  numOfEmployees: number;
+  phone: string;
 };

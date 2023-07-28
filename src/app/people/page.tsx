@@ -2,127 +2,9 @@ import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import PersonRow from "@/components/PersonRow";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { peopleProspects } from "@/lib/prospects_database";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
-import { LibraryPerson } from "@/types/apolla";
-
-export const peopleLibrary: LibraryPerson[] = [
-  {
-    name: "Avi Green",
-    title: "CFO",
-    location: "United Oil & Gas Corp.",
-    email: "agree@1auog.com",
-  },
-  {
-    name: "Siddartha Nedaerk",
-    title: "-",
-    location: "San Francisco, CA",
-    email: "si@1anedaerk.com",
-  },
-  {
-    name: "Sara Smith",
-    title: "Director of Engineering",
-    location: "San Francisco, CA",
-    email: "sar@1agmail.com",
-  },
-  {
-    name: "Brice Swyre",
-    title: "SVP, Procurement",
-    location: "New York, NY",
-    email: "ros@1aedge.com",
-  },
-  {
-    name: "Marjy Marge",
-    title: "CFO",
-    location: "Austin, TX",
-    email: "sea@1aedge.com",
-  },
-  {
-    name: "Yancy Tear",
-    title: "VP, Facilities",
-    location: "Portland, Oregon",
-    email: "jroge@1aburlington.com",
-  },
-  {
-    name: "Irma Vasilik",
-    title: "Editor",
-    location: "New York, NY",
-    email: "irm@1anytimes.com",
-  },
-  {
-    name: "Meghann Durtnal",
-    title: "Staff Accountant IV",
-    location: "Tucson, AZ",
-    email: "ajame@1auog.com",
-  },
-  {
-    name: "Dorothy Durtnal",
-    title: "Staff Accountant IV",
-    location: "Tucson, AZ",
-    email: "do@1adurtnal.com",
-  },
-  {
-    name: "Sammy Seston",
-    title: "Accountant I",
-    location: "Mountain View, CA",
-    email: "tryple@1auog.com",
-  },
-  {
-    name: "Lesya Tinhim",
-    title: "Safety Technician IV",
-    location: "Singapore, Singapore",
-    email: "ibol@1auog.com",
-  },
-  {
-    name: "Zaneta Tewkesbury",
-    title: "VP Marketing",
-    location: "Chicago, IL",
-    email: "za@1atewk.com",
-  },
-  {
-    name: "Nyssa Barrera",
-    title: "Marketing Manager",
-    location: "Chicago, IL",
-    email: "lore@1aoutlook.net",
-  },
-  {
-    name: "Andy Tipple",
-    title: "Librarian",
-    location: "Gateshead, Tyne and Wear NE26, UK",
-    email: "ason@1auog.com",
-  },
-  {
-    name: "Sophi Biles",
-    title: "Recruiting Manager",
-    location: "Chicago, IL",
-    email: "spavlov@1auog.com",
-  },
-  {
-    name: "Florida Garces",
-    title: "Web Developer IV",
-    location: "Chicago, IL",
-    email: "bond_joh@1agrandhotels.com",
-  },
-  {
-    name: "Maribeth Popping",
-    title: "Analyst Programmer",
-    location: "Mountain View, CA",
-    email: "pa@1apyramid.net",
-  },
-  {
-    name: "Moritz Dryburgh",
-    title: "Dental Hygienist",
-    location: "Singapore, Singapore",
-    email: "efran@1agenepoint.com",
-  },
-  {
-    name: "Reid Semiras",
-    title: "Teacher",
-    location: "Singapore, Singapore",
-    email: "asong@1auog.com",
-  },
-];
-
 import { cookies } from "next/headers";
 
 async function PeopleTable() {
@@ -135,7 +17,7 @@ async function PeopleTable() {
   const crmContactPageMatches = await fetchCrmContactsByEmails(
     activeCustomer.id,
     activeConnection.provider_name,
-    peopleLibrary.map((person) => person.email)
+    peopleProspects.map((person) => person.email)
   );
 
   return (
@@ -163,7 +45,7 @@ async function PeopleTable() {
           </tr>
         </thead>
         <tbody>
-          {peopleLibrary.map((person, idx) => (
+          {peopleProspects.map((person, idx) => (
             <PersonRow
               key={`Person_${idx}`}
               person={person}
