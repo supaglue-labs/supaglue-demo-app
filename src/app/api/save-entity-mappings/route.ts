@@ -2,16 +2,16 @@ import { API_HOST } from "@/lib/env";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Nextjs API Route that calls Supaglue's CRM Management API to disconnect a provider.
- * https://docs.supaglue.com/api/v2/mgmt/delete-connection
+ * Nextjs API Route that calls Supaglue's Management API to allow your customer to map their CRM fields to your schema.
+ * https://docs.supaglue.com/api/v2/mgmt/upsert-entity-mapping
  */
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   const data = await request.json();
 
   const res = await fetch(
-    `${API_HOST}/mgmt/v2/customers/${data.customerId}/connections/${data.connectionId}`,
+    `${API_HOST}/mgmt/v2/entity_mappings/${data.entity_id}`,
     {
-      method: "DELETE",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": process.env.NEXT_PUBLIC_SUPAGLUE_API_KEY!,
@@ -27,11 +27,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.error();
   }
 
-  let responseData = {};
-
-  try {
-    responseData = await res.json();
-  } catch (err) {}
+  const responseData = await res.text();
 
   return NextResponse.json(responseData);
 }

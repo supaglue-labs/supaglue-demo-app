@@ -1,11 +1,11 @@
 import { API_HOST } from "@/lib/env";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Nextjs API Route that calls Supaglue's Management API to trigger a full refresh of data for an object.
  * https://docs.supaglue.com/api/v2/mgmt/trigger-sync
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const data = await request.json();
 
   const res = await fetch(`${API_HOST}/mgmt/v2/syncs/_trigger`, {

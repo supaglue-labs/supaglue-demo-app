@@ -1,11 +1,11 @@
 import { API_HOST } from "@/lib/env";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Nextjs API Route that calls Supaglue's Management API to allow your customer to map their CRM fields to your schema.
  * https://docs.supaglue.com/api/v2/mgmt/update-object-field-mappings
  */
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   const data = await request.json();
 
   const res = await fetch(`${API_HOST}/mgmt/v2/field_mappings/_update_object`, {

@@ -3,20 +3,17 @@ import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import { DATA_MODEL } from "@/lib/env";
 import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
-import { fetchObjects } from "@/remote/supaglue/fetch_objects";
+import { fetchObjectFieldMappings } from "@/remote/supaglue/fetch_object_field_mappings";
 import { fetchProperties } from "@/remote/supaglue/fetch_properties";
 import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
-import { ReactNode } from "react";
 
-import { AccordionItem } from "@/components/AccordionItem";
+import FieldOrEntityMapper from "@/components/FieldOrEntityMapper";
+import IntegrationsHeader from "@/components/IntegrationsHeader";
 import StatCard from "@/components/StatCard";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { fetchEntityFieldMappings } from "@/remote/supaglue/fetch_entity_field_mappings";
 import { Property } from "@/types/supaglue";
 import { cookies } from "next/headers";
-
-function Header({ children }: { children: ReactNode }) {
-  return <h1 className="text-xl semi-bold underline my-2">{children}</h1>;
-}
 
 export default async function IntegrationDetails({
   params: {
@@ -34,8 +31,23 @@ export default async function IntegrationDetails({
     providerName
   );
 
-  const objects = await fetchObjects(activeCustomer.id, providerName);
-  const objectNames = objects.map((object) => object.object_name) || [];
+  const objectFieldMappings = await fetchObjectFieldMappings(
+    activeCustomer.id,
+    providerName
+  );
+  const entityFieldMappings = await fetchEntityFieldMappings(
+    activeCustomer.id,
+    providerName
+  );
+
+  const objectOrEntityNames =
+    entityFieldMappings.map(
+      (entityFieldMapping) => entityFieldMapping.entity_name
+    ) ||
+    objectFieldMappings.map(
+      (objectFieldMapping) => objectFieldMapping.object_name
+    ) ||
+    [];
 
   /**
    * Fetch all field mapping options per object
@@ -43,10 +55,10 @@ export default async function IntegrationDetails({
   const properties = await fetchProperties(
     activeCustomer.id,
     DATA_MODEL,
-    objectNames,
+    objectOrEntityNames,
     providerName
   );
-  const propertiesMap: Record<string, Property[]> = objectNames
+  const propertiesMap: Record<string, Property[]> = objectOrEntityNames
     .map((objectName: string) => objectName)
     .reduce((acc: any, objectName: string, idx: number) => {
       return { ...acc, [objectName]: properties[idx].properties };
@@ -55,7 +67,7 @@ export default async function IntegrationDetails({
   /**
    * Fetch all sync runs per object
    */
-  const syncRuns = await fetchSyncRuns(DATA_MODEL, objectNames);
+  const syncRuns = await fetchSyncRuns(DATA_MODEL, objectOrEntityNames);
 
   return (
     <>
@@ -64,7 +76,7 @@ export default async function IntegrationDetails({
         <div className="form-control flex flex-col gap-4">
           {/* Connect */}
           <div className="max-w-md">
-            <Header>Integration Connection</Header>
+            <IntegrationsHeader>Integration Connection</IntegrationsHeader>
             <ConnectPanel
               customerId={activeCustomer.id}
               providerName={providerName}
@@ -74,32 +86,22 @@ export default async function IntegrationDetails({
 
           {/* Field mapping */}
           <div className="max-w-md">
-            <Header>Field Mappings</Header>
-            {objects.length === 0 && (
-              <div className="italic">No objects for field mapping.</div>
-            )}
-            <div className="join join-vertical w-full">
-              {objects.map((object, idx: number) => {
-                return (
-                  <AccordionItem
-                    key={`AccordionItem_${idx}`}
-                    object={object}
-                    providerName={providerName}
-                    properties={propertiesMap[object.object_name] || []}
-                  />
-                );
-              })}
-            </div>
+            <FieldOrEntityMapper
+              providerName={providerName}
+              propertiesMap={propertiesMap}
+              objectFieldMappings={objectFieldMappings}
+              entityMappings={entityFieldMappings}
+            />
           </div>
 
           {/* Last Synced */}
           <div>
-            <Header>Sync Stats</Header>
-            {objectNames.length === 0 && (
+            <IntegrationsHeader>Sync Stats</IntegrationsHeader>
+            {objectOrEntityNames.length === 0 && (
               <div className="italic">No objects are currently synced.</div>
             )}
             <div className="stats stats-vertical lg:stats-horizontal shadow">
-              {objectNames.map((objectName: string, idx: number) => {
+              {objectOrEntityNames.map((objectName: string, idx: number) => {
                 const syncRun = syncRuns.find(
                   (syncRun) => syncRun.results[0]?.object === objectName
                 );

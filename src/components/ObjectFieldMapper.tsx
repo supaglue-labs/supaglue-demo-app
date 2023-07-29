@@ -3,84 +3,14 @@
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { DATA_MODEL } from "@/lib/env";
 import { getHeadersWithCustomerProvider } from "@/lib/headers";
-import { FieldMapping } from "@/types/supaglue";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { FieldMapping, Property } from "@/types/supaglue";
+import { useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
+import FieldMappingLabel from "./FieldMappingLabel";
+import FieldPair from "./FieldPair";
 import { Toast } from "./Toast";
 
-function FieldMappingLabel({ providerName }: { providerName: string }) {
-  return (
-    <>
-      <label className="label">
-        <span className="label-text underline">Apolla.io field</span>
-      </label>
-      <label className="label">
-        <span className="label-text underline">Your {providerName} field</span>
-      </label>
-    </>
-  );
-}
-
-function FieldPair({
-  name,
-  schemaMappedName,
-  customerMappedName,
-  providerName,
-  options = [],
-  onChange,
-  disabled,
-}: {
-  name: string;
-  schemaMappedName?: string;
-  customerMappedName?: string;
-  providerName: string;
-  options: { id: string; label: string }[];
-  onChange: ChangeEventHandler<HTMLSelectElement>;
-  disabled: boolean;
-}) {
-  return (
-    <>
-      <input
-        type="text"
-        disabled={true}
-        className="input input-bordered w-full max-w-xs"
-        defaultValue={name}
-      />
-      <div
-        className="tooltip"
-        data-tip={
-          Boolean(schemaMappedName)
-            ? "This is set by Apolla.io"
-            : customerMappedName
-        }
-      >
-        <select
-          className="select w-full max-w-xs"
-          onChange={onChange}
-          disabled={disabled}
-          defaultValue={schemaMappedName ?? customerMappedName}
-        >
-          <option disabled>{providerName} field</option>
-          {schemaMappedName ? (
-            <option>{schemaMappedName}</option>
-          ) : (
-            options
-              .sort((a, b) => {
-                return ("" + a.label).localeCompare(b.label);
-              })
-              .map((option, idx: number) => (
-                <option key={option.id} value={option.id} data-idx={idx}>
-                  {option.label} ({option.id ? option.id : "Select a field"})
-                </option>
-              ))
-          )}
-        </select>
-      </div>
-    </>
-  );
-}
-
-export function FieldMapper({
+export function ObjectFieldMapper({
   providerName,
   fields,
   objectName,
@@ -89,11 +19,18 @@ export function FieldMapper({
   providerName: string;
   fields: FieldMapping[];
   objectName: string;
-  properties: { id: string; label: string }[];
+  properties: Property[];
 }) {
   const [message, setMessage] = useState("Saved.");
   const [showToast, setShowToast] = useState(false);
   const [shouldFullRefresh, setShouldFullRefresh] = useState(false);
+  const [canSave, setCanSave] = useState(false);
+  const [draftFields, setDraftFields] = useState(
+    fields.map((field) => ({
+      schema_field: field.name,
+      mapped_field: field.customer_mapped_name,
+    })) // TODO: change schema get/put interface to remove mapping
+  );
   const activeCustomer = useCustomerContext();
 
   /**
@@ -146,26 +83,31 @@ export function FieldMapper({
     }
   }, [data, error]);
 
-  const hasAnyCustomerMappedFields = fields.some(
-    (fieldMapping) => !fieldMapping.schema_mapped_name
-  ); // TODO: make this explicit in data model
+  useEffect(() => {
+    const hasAllFieldsMapped = !draftFields.some(
+      (draftField) =>
+        draftField.mapped_field === "" || draftField.mapped_field === undefined
+    );
+    setCanSave(hasAllFieldsMapped);
+  }, [draftFields]);
 
   const emptyOption = { id: "", label: "" };
 
   return (
     <div className="grid grid-cols-2 gap-4">
       <FieldMappingLabel providerName={providerName} />
-      {fields.map((fieldMapping, idx: number) => (
+      {draftFields.map((draftFieldMapping, idx: number) => (
         <FieldPair
           key={`FieldPair_${idx}`}
-          name={fieldMapping.name}
+          name={draftFieldMapping.schema_field}
           providerName={providerName}
-          disabled={Boolean(fieldMapping.schema_mapped_name)}
-          schemaMappedName={fieldMapping.schema_mapped_name}
-          customerMappedName={fieldMapping.customer_mapped_name}
+          field={draftFieldMapping.schema_field}
+          value={draftFieldMapping.mapped_field}
           options={[emptyOption, ...properties]}
           onChange={(event) => {
-            fields[idx].customer_mapped_name = event.target.value;
+            const newFields = draftFields.splice(0);
+            newFields[idx].mapped_field = event.target.value;
+            setDraftFields(newFields);
           }}
         />
       ))}
@@ -177,7 +119,7 @@ export function FieldMapper({
             <span className="label-text">Refresh data on save</span>
             <input
               type="checkbox"
-              disabled={!hasAnyCustomerMappedFields}
+              disabled={!canSave}
               checked={shouldFullRefresh}
               className="checkbox"
               onChange={() => {
@@ -190,15 +132,12 @@ export function FieldMapper({
         {/* Save Button */}
         <button
           className="btn btn-primary btn-sm"
-          disabled={!hasAnyCustomerMappedFields}
+          disabled={!canSave}
           onClick={() => {
             trigger({
               type: DATA_MODEL,
               name: objectName,
-              field_mappings: fields.map((fieldMapping) => ({
-                schema_field: fieldMapping.name,
-                mapped_field: fieldMapping.customer_mapped_name,
-              })),
+              field_mappings: draftFields,
             });
             if (shouldFullRefresh) {
               triggerFullRefresh({
