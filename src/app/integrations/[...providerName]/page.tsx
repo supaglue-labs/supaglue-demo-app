@@ -1,17 +1,17 @@
-import { ConnectPanel } from "@/components/ConnectPanel";
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
+import { ConnectPanel } from "@/components/integrations/ConnectPanel";
 import { DATA_MODEL } from "@/lib/env";
 import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
-import { fetchObjectFieldMappings } from "@/remote/supaglue/fetch_object_field_mappings";
+import { fetchFieldMappings } from "@/remote/supaglue/fetch_field_mappings";
 import { fetchProperties } from "@/remote/supaglue/fetch_properties";
 import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
 
-import FieldOrEntityMapper from "@/components/FieldOrEntityMapper";
-import IntegrationsHeader from "@/components/IntegrationsHeader";
-import StatCard from "@/components/StatCard";
+import FieldOrEntityMapper from "@/components/integrations/FieldOrEntityMapper";
+import IntegrationsHeader from "@/components/integrations/IntegrationsHeader";
+import StatCard from "@/components/integrations/StatCard";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
-import { fetchEntityFieldMappings } from "@/remote/supaglue/fetch_entity_field_mappings";
+import { fetchEntityMappings } from "@/remote/supaglue/fetch_entity_mappings";
 import { Property } from "@/types/supaglue";
 import { cookies } from "next/headers";
 
@@ -31,11 +31,11 @@ export default async function IntegrationDetails({
     providerName
   );
 
-  const objectFieldMappings = await fetchObjectFieldMappings(
+  const objectFieldMappings = await fetchFieldMappings(
     activeCustomer.id,
     providerName
   );
-  const entityFieldMappings = await fetchEntityFieldMappings(
+  const entityFieldMappings = await fetchEntityMappings(
     activeCustomer.id,
     providerName
   );
@@ -85,7 +85,7 @@ export default async function IntegrationDetails({
           </div>
 
           {/* Field mapping */}
-          <div className="max-w-md">
+          <div className="max-w-2xl">
             <FieldOrEntityMapper
               providerName={providerName}
               propertiesMap={propertiesMap}

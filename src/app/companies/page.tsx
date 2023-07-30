@@ -1,4 +1,4 @@
-import CompanyRow from "@/components/CompanyRow";
+import CompanyRow from "@/components/companies/CompanyRow";
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import { useCustomerContext } from "@/hooks/useCustomerContext";

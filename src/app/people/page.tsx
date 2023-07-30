@@ -1,6 +1,6 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
-import PersonRow from "@/components/PersonRow";
+import PersonRow from "@/components/people/PersonRow";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { peopleProspects } from "@/lib/prospects_database";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";

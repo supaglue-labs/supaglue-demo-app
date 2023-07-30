@@ -6,11 +6,11 @@ import { getHeadersWithCustomerProvider } from "@/lib/headers";
 import { FieldMapping, Property } from "@/types/supaglue";
 import { useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
-import FieldMappingLabel from "./FieldMappingLabel";
-import FieldPair from "./FieldPair";
-import { Toast } from "./Toast";
+import MapperLabel from "../../MapperLabel";
+import { Toast } from "../../Toast";
+import FieldPair from "../FieldPair";
 
-export function ObjectFieldMapper({
+export function FieldMapper({
   providerName,
   fields,
   objectName,
@@ -95,7 +95,7 @@ export function ObjectFieldMapper({
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      <FieldMappingLabel providerName={providerName} />
+      <MapperLabel providerName={providerName} />
       {draftFields.map((draftFieldMapping, idx: number) => (
         <FieldPair
           key={`FieldPair_${idx}`}

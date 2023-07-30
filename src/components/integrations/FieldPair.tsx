@@ -20,15 +20,12 @@ export default function FieldPair({
 }) {
   return (
     <>
-      <input
-        type="text"
-        disabled={true}
-        className="input input-bordered w-full max-w-xs"
-        defaultValue={field}
-      />
+      <div className="flex w-full max-w-xs items-center text-sm font-semibold">
+        <span>{field}</span>
+      </div>
       <div className="tooltip">
         <select
-          className="select w-full max-w-xs"
+          className="select select-bordered w-full max-w-xs"
           onChange={onChange}
           disabled={disabled}
           value={value ?? ""}

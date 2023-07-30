@@ -8,20 +8,21 @@ import { EntityMapping } from "@/types/supaglue";
  * You can use this information to render entity mapping UI to your customers.
  * https://docs.supaglue.com/api/v2/mgmt/entity_mappings
  */
-export async function fetchEntityFieldMappings(
+export async function fetchEntityMappings(
   customerId: string,
   providerName: string
 ) {
-  const entityFieldMappings = await fetcher<
-    EntityMapping[] | { errors: string[] }
-  >(`${API_HOST}/mgmt/v2/entity_mappings`, {
-    headers: getHeadersWithCustomerProvider(customerId, providerName),
-    cache: "no-store",
-  });
+  const entityMappings = await fetcher<EntityMapping[] | { errors: string[] }>(
+    `${API_HOST}/mgmt/v2/entity_mappings`,
+    {
+      headers: getHeadersWithCustomerProvider(customerId, providerName),
+      cache: "no-store",
+    }
+  );
 
-  if ("errors" in entityFieldMappings) {
+  if ("errors" in entityMappings) {
     return [];
   }
 
-  return entityFieldMappings;
+  return entityMappings;
 }

@@ -18,7 +18,7 @@ import TeamleaderIcon from "@/assets/connector_icons/teamleader.jpeg";
 import ZendeskSellIcon from "@/assets/connector_icons/zendesk_sell.png";
 import ZohoCrmIcon from "@/assets/connector_icons/zoho_crm.png";
 import { Content } from "@/components/Content";
-import IntegrationCard from "@/components/IntegrationCard";
+import IntegrationCard from "@/components/integrations/IntegrationCard";
 import { Nav } from "@/components/Nav";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { API_HOST } from "@/lib/env";

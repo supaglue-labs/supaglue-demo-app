@@ -1,8 +1,8 @@
 import { EntityMapping, ObjectFieldMapping, Property } from "@/types/supaglue";
 import { AccordionItem } from "./AccordionItem";
-import { EntityFieldMapper } from "./EntityFieldMapper";
 import IntegrationsHeader from "./IntegrationsHeader";
-import { ObjectFieldMapper } from "./ObjectFieldMapper";
+import { EntityMapper } from "./entities/EntityMapper";
+import { FieldMapper } from "./objects/FieldMapper";
 
 // For demo: show entity mapper if entities exist
 // TODO: separate
@@ -31,7 +31,7 @@ export default function FieldOrEntityMapper({
                 key={`AccordionItem_${idx}`}
                 title={entityMapping.entity_name}
               >
-                <EntityFieldMapper
+                <EntityMapper
                   entityMapping={entityMapping}
                   providerName={providerName}
                 />
@@ -56,7 +56,7 @@ export default function FieldOrEntityMapper({
               key={`AccordionItem_${idx}`}
               title={objectFieldMapping.object_name}
             >
-              <ObjectFieldMapper
+              <FieldMapper
                 providerName={providerName}
                 fields={objectFieldMapping.fields}
                 properties={propertiesMap[objectFieldMapping.object_name] || []}

@@ -8,20 +8,20 @@ import { ObjectFieldMapping } from "@/types/supaglue";
  * You can use this information to render field mapping UI to your customers.
  * https://docs.supaglue.com/api/v2/mgmt/field_mappings
  */
-export async function fetchObjectFieldMappings(
+export async function fetchFieldMappings(
   customerId: string,
   providerName: string
 ) {
-  const objectFieldMappings = await fetcher<
+  const fieldMappings = await fetcher<
     ObjectFieldMapping[] | { errors: string[] }
   >(`${API_HOST}/mgmt/v2/field_mappings`, {
     headers: getHeadersWithCustomerProvider(customerId, providerName),
     cache: "no-store",
   });
 
-  if ("errors" in objectFieldMappings) {
+  if ("errors" in fieldMappings) {
     return [];
   }
 
-  return objectFieldMappings;
+  return fieldMappings;
 }

@@ -8,9 +8,9 @@ import { EntityMapping } from "@/types/supaglue";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import FieldMappingLabel from "./FieldMappingLabel";
-import FieldPair from "./FieldPair";
-import { Toast } from "./Toast";
+import MapperLabel from "../../MapperLabel";
+import { Toast } from "../../Toast";
+import FieldPair from "../FieldPair";
 
 function EntityObjectSelector({
   value,
@@ -45,7 +45,7 @@ function EntityObjectSelector({
   );
 }
 
-export function EntityFieldMapper({
+export function EntityMapper({
   entityMapping,
   providerName,
 }: {
@@ -139,16 +139,18 @@ export function EntityFieldMapper({
 
   return (
     <div>
-      <EntityObjectSelector
-        value={selectedObject}
-        providerName={providerName}
-        onChange={(event) => {
-          setSelectedObject(event.target.value);
-        }}
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <EntityObjectSelector
+          value={selectedObject}
+          providerName={providerName}
+          onChange={(event) => {
+            setSelectedObject(event.target.value);
+          }}
+        />
+      </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <FieldMappingLabel providerName={providerName} />
+        <MapperLabel providerName={providerName} />
         {draftFieldMappings.map((draftFieldMapping, idx: number) => (
           <FieldPair
             key={`FieldPair_${idx}`}
