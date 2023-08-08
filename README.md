@@ -16,9 +16,9 @@ Example "Sales Prospecting" app called Apolla.io that integrates with Supaglue.
 
 1. Set `NEXT_PUBLIC_SUPAGLUE_API_KEY` and `DATABASE_URL` in your `.env`.
    - Find your Supaglue API Key by going to Configuration -> Api Key in your Supaglue Management Portal.
-   - You will need your Postgres credentials to enter your []`DATABASE_URL`](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases/connect-your-database-typescript-postgresql).
-2. Revise `lib/constants.ts` to reflect your source Supaglue environment.
-   - `CUSTOMER_ID` is the CRM customer you have authenticated with.
+   - You will need your Postgres credentials to enter your [`DATABASE_URL`](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases/connect-your-database-typescript-postgresql).
+2. Revise `lib/env.ts` to reflect your source Supaglue environment.
+   - `DATA_MODEL` is the [data model](https://docs.supaglue.com/category/data-models) you choose to use for Supaglue.
    - `API_HOST` is `https://api.supaglue.io` for Supaglue Cloud.
    - `APPLICATION_ID` can be found by going to your Supaglue Management Portal and clicking "Copy ID".
 3. `yarn install`
