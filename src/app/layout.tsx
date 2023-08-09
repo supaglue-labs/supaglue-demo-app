@@ -9,6 +9,9 @@ import classNames from "classnames";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 
+import { TicketModal } from "@/components/TicketModal";
+import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
 import FaceIcon from "../assets/face.avif";
 import "./globals.css";
 
@@ -53,11 +56,14 @@ export const metadata = {
   description: "Reach every buyer on earth",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const activeCustomer = useCustomerContext();
+  const activeConnection = await fetchActiveConnection(activeCustomer.id);
+
   return (
     <html lang="en" data-theme="light">
       <body className={inter.className}>
@@ -92,6 +98,8 @@ export default function RootLayout({
                   </ul>
                 </li>
                 <li className="-mx-6 mt-auto">
+                  <TicketModal providerName={activeConnection.provider_name} />
+
                   <a
                     href="#"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
