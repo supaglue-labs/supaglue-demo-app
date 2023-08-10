@@ -16,5 +16,5 @@ export async function fetchActiveConnection(customerId: string) {
     }
   );
 
-  return connections[0];
+  return connections.filter((connection) => connection.category === "crm")[0];
 }

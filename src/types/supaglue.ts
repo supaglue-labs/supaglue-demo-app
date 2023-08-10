@@ -37,6 +37,7 @@ export type EntityMapping = {
 
 export type Connection = {
   id: string;
+  category: string;
   provider_name: string;
 };
 
