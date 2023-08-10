@@ -1,48 +1,17 @@
-import { EntityMapping, ObjectFieldMapping, Property } from "@/types/supaglue";
+import { ObjectFieldMapping, Property } from "@/types/supaglue";
 import { AccordionItem } from "./AccordionItem";
 import IntegrationsHeader from "./IntegrationsHeader";
-import { EntityMapper } from "./entities/EntityMapper";
 import { FieldMapper } from "./objects/FieldMapper";
 
-// For demo: show entity mapper if entities exist
-// TODO: separate
-export default function FieldOrEntityMapper({
+export default function FieldMapperComponent({
   providerName,
   propertiesMap,
   objectFieldMappings,
-  entityMappings,
 }: {
   providerName: string;
   propertiesMap: Record<string, Property[]>;
   objectFieldMappings: ObjectFieldMapping[];
-  entityMappings?: EntityMapping[];
 }) {
-  if (entityMappings) {
-    return (
-      <>
-        <IntegrationsHeader>Entity Mappings</IntegrationsHeader>
-        {entityMappings.length === 0 && (
-          <div className="italic">No entities for field mapping.</div>
-        )}
-        <div className="join join-vertical w-full">
-          {entityMappings.map((entityMapping, idx: number) => {
-            return (
-              <AccordionItem
-                key={`AccordionItem_${idx}`}
-                title={entityMapping.entity_name}
-              >
-                <EntityMapper
-                  entityMapping={entityMapping}
-                  providerName={providerName}
-                />
-              </AccordionItem>
-            );
-          })}
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <IntegrationsHeader>Field Mappings</IntegrationsHeader>

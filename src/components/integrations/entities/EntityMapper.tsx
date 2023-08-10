@@ -17,7 +17,7 @@ function EntityObjectSelector({
   providerName,
   onChange,
 }: {
-  value: string;
+  value?: string;
   providerName: string;
   onChange: ChangeEventHandler<HTMLSelectElement>;
 }) {
@@ -32,14 +32,11 @@ function EntityObjectSelector({
         className="select select-bordered"
         onChange={onChange}
       >
-        {[
-          "",
-          providerObjects.map((providerObject) => (
-            <option key={providerObject} value={providerObject}>
-              {providerObject}
-            </option>
-          )),
-        ]}
+        {["", ...providerObjects].map((providerObject) => (
+          <option key={providerObject} value={providerObject}>
+            {providerObject}
+          </option>
+        ))}
       </select>
     </div>
   );
@@ -56,7 +53,7 @@ export function EntityMapper({
   const [showToast, setShowToast] = useState(false);
   const [shouldFullRefresh, setShouldFullRefresh] = useState(false);
   const [selectedObject, setSelectedObject] = useState(
-    entityMapping.object.name
+    entityMapping.object?.name
   );
   const [canSave, setCanSave] = useState(false);
   const [draftFieldMappings, setDraftFieldMappings] = useState(
@@ -65,7 +62,9 @@ export function EntityMapper({
   const activeCustomer = useCustomerContext();
 
   const { data: propertiesResponse = { properties: [] } } = useSWR(
-    `/api/fetch-properties?name=${selectedObject}&type=standard`,
+    selectedObject
+      ? `/api/fetch-properties?name=${selectedObject}&type=standard`
+      : null,
     (url) =>
       fetch(url, {
         method: "GET",
@@ -75,6 +74,8 @@ export function EntityMapper({
         ),
       }).then((res) => res.json())
   );
+
+  console.log("got stuff", selectedObject, propertiesResponse);
 
   /**
    * Use SWR Mutation to allow your customers to save their field mappings to your schema.
