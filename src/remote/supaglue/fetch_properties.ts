@@ -17,7 +17,7 @@ export async function fetchProperties(
     objectNames.map(
       async (objectName: string) =>
         await fetcher<{ properties: Property[] }>(
-          `${API_HOST}/mgmt/v2/properties?type=${objectType}&name=${objectName}`,
+          `${API_HOST}/metadata/v2/properties?type=${objectType}&name=${objectName}`,
           {
             headers: getHeadersWithCustomerProvider(customerId, providerName),
           }

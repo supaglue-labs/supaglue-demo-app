@@ -1,19 +1,26 @@
 import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import { ConnectPanel } from "@/components/integrations/ConnectPanel";
-import { DATA_MODEL } from "@/lib/env";
-import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
-import { fetchFieldMappings } from "@/remote/supaglue/fetch_field_mappings";
-import { fetchProperties } from "@/remote/supaglue/fetch_properties";
-import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
-
-import FieldOrEntityMapper from "@/components/integrations/FieldOrEntityMapper";
+import EntityMapperComponent from "@/components/integrations/EntityMapper";
+import FieldMapperComponent from "@/components/integrations/FieldMapper";
 import IntegrationsHeader from "@/components/integrations/IntegrationsHeader";
 import StatCard from "@/components/integrations/StatCard";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
+import { DATA_MODEL } from "@/lib/env";
+import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
 import { fetchEntityMappings } from "@/remote/supaglue/fetch_entity_mappings";
+import { fetchFieldMappings } from "@/remote/supaglue/fetch_field_mappings";
+import { fetchProperties } from "@/remote/supaglue/fetch_properties";
+import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
 import { Property } from "@/types/supaglue";
 import { cookies } from "next/headers";
+
+const PROVIDERS_TO_SHOW_ENTITY_MAPPING = [
+  "salesforce",
+  "hubspot",
+  "pipedrive",
+  "ms_dynamics_365_sales",
+];
 
 export default async function IntegrationDetails({
   params: {
@@ -35,13 +42,13 @@ export default async function IntegrationDetails({
     activeCustomer.id,
     providerName
   );
-  const entityFieldMappings = await fetchEntityMappings(
+  const entityMappings = await fetchEntityMappings(
     activeCustomer.id,
     providerName
   );
 
   const objectOrEntityNames =
-    entityFieldMappings.map(
+    entityMappings.map(
       (entityFieldMapping) => entityFieldMapping.entity_name
     ) ||
     objectFieldMappings.map(
@@ -84,15 +91,22 @@ export default async function IntegrationDetails({
             />
           </div>
 
-          {/* Field mapping */}
-          <div className="max-w-2xl">
-            <FieldOrEntityMapper
-              providerName={providerName}
-              propertiesMap={propertiesMap}
-              objectFieldMappings={objectFieldMappings}
-              entityMappings={entityFieldMappings}
-            />
-          </div>
+          {PROVIDERS_TO_SHOW_ENTITY_MAPPING.includes(providerName) ? (
+            <div className="max-w-2xl">
+              <EntityMapperComponent
+                providerName={providerName}
+                entityMappings={entityMappings}
+              />
+            </div>
+          ) : (
+            <div className="max-w-2xl">
+              <FieldMapperComponent
+                providerName={providerName}
+                propertiesMap={propertiesMap}
+                objectFieldMappings={objectFieldMappings}
+              />
+            </div>
+          )}
 
           {/* Last Synced */}
           <div>

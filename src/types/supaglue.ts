@@ -28,7 +28,7 @@ export type EntityMappingFieldMapping = {
 export type EntityMapping = {
   entity_id: string;
   entity_name: string;
-  object: {
+  object?: {
     name: string;
   };
   allow_additional_field_mappings: boolean;

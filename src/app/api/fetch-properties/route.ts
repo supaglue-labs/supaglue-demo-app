@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Nextjs API Route that calls Supaglue's Management API to fetch properties.
- * https://docs.supaglue.com/api/v2/mgmt/list-properties
+ * https://docs.supaglue.com/api/v2/metadata/list-properties
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const res = await fetch(
-    `${API_HOST}/mgmt/v2/properties?${searchParams.toString()}`,
+    `${API_HOST}/metadata/v2/properties?${searchParams.toString()}`,
     {
       method: "GET",
       headers: {
