@@ -75,8 +75,6 @@ export function EntityMapper({
       }).then((res) => res.json())
   );
 
-  console.log("got stuff", selectedObject, propertiesResponse);
-
   /**
    * Use SWR Mutation to allow your customers to save their field mappings to your schema.
    * This edge function will hit api/save-field-mappings/route.ts.
