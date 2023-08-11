@@ -5,7 +5,9 @@ import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { companyProspects } from "@/lib/prospects_database";
 import { fetchCrmAccountsByWebsite } from "@/remote/postgres/fetch_crm_accounts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
+import { CrmAccount } from "@/types/apolla";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 async function CompanyTable() {
   // Note: force Dynamic Rendering
@@ -14,21 +16,32 @@ async function CompanyTable() {
   const activeCustomer = useCustomerContext();
   const activeConnection = await fetchActiveConnection(activeCustomer.id);
 
-  const crmAccountPageMatches = await fetchCrmAccountsByWebsite(
-    activeCustomer.id,
-    activeConnection.provider_name,
-    companyProspects.map((company) => company.website)
-  );
+  let crmAccountPageMatches: CrmAccount[] = [];
+
+  if (activeConnection) {
+    crmAccountPageMatches = await fetchCrmAccountsByWebsite(
+      activeCustomer.id,
+      activeConnection.provider_name,
+      companyProspects.map((company) => company.website)
+    );
+  }
 
   return (
     <div className="overflow-x-auto">
       {/* Menu Bar */}
-      <div className="flex gap-4 my-4">
+      <div className="flex gap-4 my-4 items-center">
         <button className="btn btn-primary btn-outline btn-sm">+ Save</button>
         <button className="btn btn-primary btn-outline btn-sm">
           Find People
         </button>
         <button className="btn btn-primary btn-outline btn-sm">Export</button>
+        <span>
+          {!activeConnection && (
+            <Link className="link link-neutral italic" href="/integrations">
+              Connect a CRM
+            </Link>
+          )}
+        </span>
       </div>
 
       <table className="table table-xs">
@@ -49,7 +62,7 @@ async function CompanyTable() {
             <CompanyRow
               company={company}
               key={`Company_${idx}`}
-              providerName={activeConnection.provider_name}
+              providerName={activeConnection?.provider_name}
               isSynced={crmAccountPageMatches.some(
                 (crmAccount) => crmAccount.website === company.website
               )}

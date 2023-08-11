@@ -4,6 +4,8 @@ import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { peopleProspects } from "@/lib/prospects_database";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
+import { CrmContact } from "@/types/apolla";
+import Link from "next/link";
 
 function Avatar() {
   return (
@@ -49,15 +51,18 @@ function Field({
   );
 }
 
-function CheckBox({ isSynced }: { isSynced: boolean }) {
+async function CheckBox({ isSynced }: { isSynced: boolean }) {
+  const activeCustomer = useCustomerContext();
+  const activeConnection = await fetchActiveConnection(activeCustomer.id);
+
   return (
     <div className="form-control max-w-xs w-full">
-      <label className="cursor-pointer label">
+      <label className="label">
         <span className="label-text">Synced to CRM</span>
         <input
           type="checkbox"
           checked={isSynced}
-          className="checkbox checkbox-accent"
+          className="checkbox checkbox-accent cursor-default"
           disabled
         />
       </label>
@@ -75,11 +80,15 @@ export default async function Person({
   const activeCustomer = useCustomerContext();
   const activeConnection = await fetchActiveConnection(activeCustomer.id);
   const activeEmail = decodeURIComponent(email);
-  const crmContacts = await fetchCrmContactsByEmails(
-    activeCustomer.id,
-    activeConnection.provider_name,
-    [activeEmail]
-  );
+  let crmContacts: CrmContact[] = [];
+
+  if (activeConnection) {
+    crmContacts = await fetchCrmContactsByEmails(
+      activeCustomer.id,
+      activeConnection.provider_name,
+      [activeEmail]
+    );
+  }
 
   const person = peopleProspects.find(
     (contact) => contact.email === activeEmail
@@ -106,28 +115,37 @@ export default async function Person({
           <div></div>
         </div>
 
-        <Field
-          className="w-full"
-          label="Address"
-          field={`${crmContact?.addresses[0]?.street_1} ${crmContact?.addresses[0]?.city}, ${crmContact?.addresses[0]?.state} ${crmContact?.addresses[0]?.country}`}
-          showCrmBadge={true}
-        />
-        <div className="w-full">
-          <label className="label">
-            <div className="label-text gap-2 flex items-center w-full">
-              Other
-              <div className="badge badge-accent badge-xs badge-outline">
-                CRM data
-              </div>
+        {!activeConnection && (
+          <Link className="link link-neutral italic" href="/integrations">
+            Connect a CRM to see more data
+          </Link>
+        )}
+        {activeConnection && (
+          <>
+            <Field
+              className="w-full"
+              label="Address"
+              field={`${crmContact?.addresses[0]?.street_1} ${crmContact?.addresses[0]?.city}, ${crmContact?.addresses[0]?.state} ${crmContact?.addresses[0]?.country}`}
+              showCrmBadge={true}
+            />
+            <div className="w-full">
+              <label className="label">
+                <div className="label-text gap-2 flex items-center w-full">
+                  Other
+                  <div className="badge badge-accent badge-xs badge-outline">
+                    CRM data
+                  </div>
+                </div>
+              </label>
+              <textarea
+                disabled
+                rows={15}
+                className="w-full textarea textarea-bordered"
+                defaultValue={JSON.stringify(crmContact?.rawData, null, 3)}
+              ></textarea>
             </div>
-          </label>
-          <textarea
-            disabled
-            rows={15}
-            className="w-full textarea textarea-bordered"
-            defaultValue={JSON.stringify(crmContact?.rawData, null, 3)}
-          ></textarea>
-        </div>
+          </>
+        )}
       </Content>
     </>
   );

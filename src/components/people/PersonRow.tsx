@@ -14,7 +14,7 @@ export default function PersonRow({
 }: {
   person: PersonProspect;
   isSynced: boolean;
-  providerName: string;
+  providerName?: string;
 }) {
   const router = useRouter();
   const activeCustomer = useCustomerContext();
@@ -26,6 +26,9 @@ export default function PersonRow({
   const { trigger, error, data, isMutating } = useSWRMutation(
     `/api/create-crm-contact`,
     async (url, { arg }: { arg: any }) => {
+      if (!providerName) {
+        return new Response();
+      }
       return await fetch(url, {
         method: "POST",
         headers: getHeadersWithCustomerProvider(
@@ -56,7 +59,7 @@ export default function PersonRow({
       <td>{person.title}</td>
       <td>{person.location}</td>
       <td>{person.email}</td>
-      <td>{isSynced ? "✅" : ""}</td>
+      <td>{isSynced ? "✅" : "-"}</td>
       <td
         className="cursor-pointer hover:text-accent-focus underline"
         onClick={() => {

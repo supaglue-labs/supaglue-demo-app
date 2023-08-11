@@ -5,7 +5,9 @@ import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { peopleProspects } from "@/lib/prospects_database";
 import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
+import { CrmContact } from "@/types/apolla";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 async function PeopleTable() {
   // Note: force Dynamic Rendering
@@ -14,21 +16,31 @@ async function PeopleTable() {
   const activeCustomer = useCustomerContext();
   const activeConnection = await fetchActiveConnection(activeCustomer.id);
 
-  const crmContactPageMatches = await fetchCrmContactsByEmails(
-    activeCustomer.id,
-    activeConnection.provider_name,
-    peopleProspects.map((person) => person.email)
-  );
+  let crmContactPageMatches: CrmContact[] = [];
+  if (activeConnection) {
+    crmContactPageMatches = await fetchCrmContactsByEmails(
+      activeCustomer.id,
+      activeConnection.provider_name,
+      peopleProspects.map((person) => person.email)
+    );
+  }
 
   return (
     <div className="overflow-x-auto">
       {/* Menu Bar */}
-      <div className="flex gap-4 my-4">
+      <div className="flex gap-4 my-4 items-center">
         <button className="btn btn-primary btn-outline btn-sm">
           Add to Sequence
         </button>
         <button className="btn btn-primary btn-outline btn-sm">Email</button>
         <button className="btn btn-primary btn-outline btn-sm">Export</button>
+        <span>
+          {!activeConnection && (
+            <Link className="link link-neutral italic" href="/integrations">
+              Connect a CRM
+            </Link>
+          )}
+        </span>
       </div>
 
       <table className="table table-xs">
@@ -49,7 +61,7 @@ async function PeopleTable() {
             <PersonRow
               key={`Person_${idx}`}
               person={person}
-              providerName={activeConnection.provider_name}
+              providerName={activeConnection?.provider_name}
               isSynced={crmContactPageMatches.some(
                 (crmContact) => crmContact.emailAddress === person.email
               )}

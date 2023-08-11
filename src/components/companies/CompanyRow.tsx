@@ -14,7 +14,7 @@ export default function CompanyRow({
 }: {
   company: CompanyProspect;
   isSynced: boolean;
-  providerName: string;
+  providerName?: string;
 }) {
   const router = useRouter();
   const activeCustomer = useCustomerContext();
@@ -26,6 +26,9 @@ export default function CompanyRow({
   const { trigger, error, data, isMutating } = useSWRMutation(
     `/api/create-crm-account`,
     async (url, { arg }: { arg: any }) => {
+      if (!providerName) {
+        return new Response();
+      }
       return await fetch(url, {
         method: "POST",
         headers: getHeadersWithCustomerProvider(
@@ -57,7 +60,7 @@ export default function CompanyRow({
       <td>{company.website}</td>
       <td>{company.numOfEmployees}</td>
       <td>{company.phone}</td>
-      <td>{isSynced ? "✅" : ""}</td>
+      <td>{isSynced ? "✅" : "-"}</td>
       <td>
         <button
           className={`min-w-[3rem] btn btn-secondary btn-outline btn-xs ${
