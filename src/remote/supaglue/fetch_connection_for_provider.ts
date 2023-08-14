@@ -19,6 +19,10 @@ export async function fetchConnectionForProvider(
     }
   );
 
+  if ("errors" in connections) {
+    throw new Error("Could not query backend");
+  }
+
   const activeConnection = connections.find(
     (connection) => connection.provider_name === providerName
   );

@@ -4,14 +4,12 @@ import { ConnectPanel } from "@/components/integrations/ConnectPanel";
 import EntityMapperComponent from "@/components/integrations/EntityMapper";
 import FieldMapperComponent from "@/components/integrations/FieldMapper";
 import IntegrationsHeader from "@/components/integrations/IntegrationsHeader";
-import StatCard from "@/components/integrations/StatCard";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { DATA_MODEL } from "@/lib/env";
 import { fetchConnectionForProvider } from "@/remote/supaglue/fetch_connection_for_provider";
 import { fetchEntityMappings } from "@/remote/supaglue/fetch_entity_mappings";
 import { fetchFieldMappings } from "@/remote/supaglue/fetch_field_mappings";
 import { fetchProperties } from "@/remote/supaglue/fetch_properties";
-import { fetchSyncRuns } from "@/remote/supaglue/fetch_sync_runs";
 import { Property } from "@/types/supaglue";
 import { cookies } from "next/headers";
 
@@ -74,7 +72,7 @@ export default async function IntegrationDetails({
   /**
    * Fetch all sync runs per object
    */
-  const syncRuns = await fetchSyncRuns(DATA_MODEL, objectOrEntityNames);
+  // const syncRuns = await fetchSyncRuns(DATA_MODEL, objectOrEntityNames);
 
   return (
     <>
@@ -109,7 +107,7 @@ export default async function IntegrationDetails({
           )}
 
           {/* Last Synced */}
-          <div>
+          {/* <div>
             <IntegrationsHeader>Sync Stats</IntegrationsHeader>
             {objectOrEntityNames.length === 0 && (
               <div className="italic">No objects are currently synced.</div>
@@ -129,7 +127,7 @@ export default async function IntegrationDetails({
                 );
               })}
             </div>
-          </div>
+          </div> */}
         </div>
       </Content>
     </>
