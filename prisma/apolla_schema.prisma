@@ -5,16 +5,16 @@ generator client {
 }
 
 datasource db {
-    provider          = "postgresql"
-    url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
-    directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-    shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+    provider  = "postgresql"
+    url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+    directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 model apolla_account {
     id                  String   @id @default(uuid())
     name                String
-    created_at          DateTime
+    created_at          DateTime @default(now())
     updated_at          DateTime
     description         String?
     industry            String?
@@ -28,13 +28,13 @@ model apolla_account {
 
 model apolla_contact {
     id              String   @id @default(uuid())
-    created_at      DateTime
+    created_at      DateTime @default(now())
     updated_at      DateTime
-    first_name      String
-    last_name       String
-    addresses       String
-    email_addresses String
-    phone_number    String
+    first_name      String?
+    last_name       String?
+    address         String?
+    email_address   String
+    phone_number    String?
     lifecycle_stage String?
     account_id      String?
     owner_id        String?

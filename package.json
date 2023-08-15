@@ -9,7 +9,7 @@
     "lint": "next lint",
     "postinstall": "yarn run generate_prisma_clients",
     "pull_supaglue_schema": "prisma db pull --schema=./prisma/supaglue_schema.prisma",
-    "migrate_apolla_db": "prisma migrate ",
+    "migrate_apolla_db": "prisma migrate dev --schema=./prisma/apolla_schema.prisma",
     "generate_prisma_clients": "prisma generate --schema prisma/supaglue_schema.prisma && prisma generate --schema prisma/apolla_schema.prisma"
   },
   "dependencies": {
