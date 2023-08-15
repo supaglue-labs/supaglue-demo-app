@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start -p 3002",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "yarn run generate_prisma_clients",
+    "pull_supaglue_schema": "prisma db pull --schema=./prisma/supaglue_schema.prisma",
+    "migrate_apolla_db": "prisma migrate ",
+    "generate_prisma_clients": "prisma generate --schema prisma/supaglue_schema.prisma && prisma generate --schema prisma/apolla_schema.prisma"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
@@ -21,6 +24,7 @@
     "daisyui": "^3.1.7",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
+    "inngest": "^2.4.1",
     "luxon": "^3.3.0",
     "next": "13.4.7",
     "postcss": "8.4.24",

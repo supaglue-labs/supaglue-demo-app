@@ -1,11 +1,12 @@
 generator client {
   provider      = "prisma-client-js"
+  output        = "./generated/supaglue_client"
   binaryTargets = ["native", "darwin"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("SUPAGLUE_DESTINATION_DATABASE_URL")
 }
 
 model crm_accounts {
@@ -128,19 +129,6 @@ model crm_users {
   @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
 }
 
-model entity_apollacontact {
-  supaglue_application_id String   @map("_supaglue_application_id")
-  supaglue_provider_name  String   @map("_supaglue_provider_name")
-  supaglue_customer_id    String   @map("_supaglue_customer_id")
-  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
-  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
-  supaglue_raw_data       Json     @map("_supaglue_raw_data")
-  supaglue_mapped_data    Json     @map("_supaglue_mapped_data")
-  id                      String
-
-  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
-}
-
 model hubspot_ticket {
   supaglue_application_id String   @map("_supaglue_application_id")
   supaglue_provider_name  String   @map("_supaglue_provider_name")
@@ -167,7 +155,20 @@ model linear_issues {
   @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
 }
 
-model entity_apollaaccount {
+model entity_contact {
+  supaglue_application_id String   @map("_supaglue_application_id")
+  supaglue_provider_name  String   @map("_supaglue_provider_name")
+  supaglue_customer_id    String   @map("_supaglue_customer_id")
+  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
+  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data       Json     @map("_supaglue_raw_data")
+  supaglue_mapped_data    Json     @map("_supaglue_mapped_data")
+  id                      String
+
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+}
+
+model entity_account {
   supaglue_application_id String   @map("_supaglue_application_id")
   supaglue_provider_name  String   @map("_supaglue_provider_name")
   supaglue_customer_id    String   @map("_supaglue_customer_id")

@@ -1,7 +1,7 @@
 import { APPLICATION_ID } from "@/lib/env";
 import { CrmContact } from "@/types/apolla";
-import { Prisma } from "@prisma/client";
-import { prisma } from "./prisma";
+import { Prisma } from "../../../prisma/generated/supaglue_client";
+import { supagluePrismaClient } from "./prisma";
 
 function mapToApollaCrmContact(crmContact: {
   id: string;
@@ -52,7 +52,7 @@ export async function fetchCrmContactsByEmails(
   providerName: string,
   emails: string[]
 ): Promise<CrmContact[]> {
-  const crmContacts = await prisma.crm_contacts.findMany({
+  const crmContacts = await supagluePrismaClient.crm_contacts.findMany({
     select: {
       id: true,
       first_name: true,

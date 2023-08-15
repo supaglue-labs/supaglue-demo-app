@@ -1,3 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient as ApollaPrismaClient } from "../../../prisma/generated/apolla_client";
+import { PrismaClient as SupagluePrismaClient } from "../../../prisma/generated/supaglue_client";
 
-export const prisma = new PrismaClient();
+export const supagluePrismaClient = new SupagluePrismaClient();
+export const apollaPrismaClient = new ApollaPrismaClient();
