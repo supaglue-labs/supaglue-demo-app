@@ -15,7 +15,7 @@ export const transformAndWriteObject = inngest.createFunction(
       object_type: dataModel, // TODO: rename `object_type` to `data_model`
     } = event.data;
 
-    if (dataModel !== "entities") {
+    if (dataModel !== "entity") {
       return { event, body: true };
     }
 
