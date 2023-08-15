@@ -11,10 +11,9 @@ export async function POST(request: NextRequest) {
   await inngest.send({
     name: `etl/transform_and_write_object_records`,
     data: {
-      event_type: data.webhook_event_type,
-      type: data.type,
-      object_type: data.object_type,
-      object: data.object,
+      event_type: data.webhook_event_type, // `sync.complete`
+      type: data.type, // `entity`
+      entity_name: data.entity_name,
     },
   });
 

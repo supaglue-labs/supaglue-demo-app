@@ -9,10 +9,8 @@ export const transformAndWriteObject = inngest.createFunction(
   { event: "etl/transform_and_write_object_records" },
   async ({ event, step, logger }) => {
     const {
-      event_type: eventType,
-      object, // The entity name
-      type, // `standard`
-      object_type: dataModel, // TODO: rename `object_type` to `data_model`
+      type: dataModel, // data model
+      entity_name: entityName,
     } = event.data;
 
     if (dataModel !== "entity") {
@@ -22,7 +20,7 @@ export const transformAndWriteObject = inngest.createFunction(
     await step.run(
       "Read all records for one object type, transform, and write to destination",
       async () => {
-        if (object === "account") {
+        if (entityName === "account") {
           const supaglueRecords =
             await supagluePrismaClient.entity_account.findMany();
 
@@ -49,7 +47,7 @@ export const transformAndWriteObject = inngest.createFunction(
               update: apollaUpdateRecord,
             });
           });
-        } else if (object === "contact") {
+        } else if (entityName === "contact") {
           const supaglueRecords =
             await supagluePrismaClient.entity_contact.findMany();
 
