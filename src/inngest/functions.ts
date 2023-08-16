@@ -2,7 +2,6 @@ import {
   apollaPrismaClient,
   supagluePrismaClient,
 } from "@/remote/postgres/prisma";
-import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
 
 export const transformAndWriteObject = inngest.createFunction(
@@ -28,7 +27,7 @@ export const transformAndWriteObject = inngest.createFunction(
             await supagluePrismaClient.entity_account.findMany();
           logger.info("Source records", { length: supaglueRecords.length });
 
-          await supaglueRecords.forEach(async (supaglueRecord) => {
+          for (const supaglueRecord of supaglueRecords) {
             const mappedData = supaglueRecord.supaglue_mapped_data as any;
 
             const apollaCreateRecord = {
@@ -43,27 +42,21 @@ export const transformAndWriteObject = inngest.createFunction(
               ...apollaCreateRecord,
             };
 
-            try {
-              await apollaPrismaClient.apolla_account.upsert({
-                where: {
-                  id: supaglueRecord.id,
-                },
-                create: apollaCreateRecord,
-                update: apollaUpdateRecord,
-              });
-              logger.info("Upserted", { id: supaglueRecord.id });
-            } catch (err) {
-              throw new NonRetriableError("Could not upsert", {
-                cause: err,
-              });
-            }
-          });
+            await apollaPrismaClient.apolla_account.upsert({
+              where: {
+                id: supaglueRecord.id,
+              },
+              create: apollaCreateRecord,
+              update: apollaUpdateRecord,
+            });
+            logger.info("Upserted", { id: supaglueRecord.id });
+          }
         } else if (entityName === "contact") {
           const supaglueRecords =
             await supagluePrismaClient.entity_contact.findMany();
           logger.info("Source records", { length: supaglueRecords.length });
 
-          await supaglueRecords.forEach(async (supaglueRecord) => {
+          for (const supaglueRecord of supaglueRecords) {
             const mappedData = supaglueRecord.supaglue_mapped_data as any;
 
             const apollaCreateRecord = {
@@ -77,21 +70,15 @@ export const transformAndWriteObject = inngest.createFunction(
               ...apollaCreateRecord,
             };
 
-            try {
-              await apollaPrismaClient.apolla_contact.upsert({
-                where: {
-                  id: supaglueRecord.id,
-                },
-                create: apollaCreateRecord,
-                update: apollaUpdateRecord,
-              });
-              logger.info("Upserted", { id: supaglueRecord.id });
-            } catch (err) {
-              throw new NonRetriableError("Could not upsert", {
-                cause: err,
-              });
-            }
-          });
+            await apollaPrismaClient.apolla_contact.upsert({
+              where: {
+                id: supaglueRecord.id,
+              },
+              create: apollaCreateRecord,
+              update: apollaUpdateRecord,
+            });
+            logger.info("Upserted", { id: supaglueRecord.id });
+          }
         }
       }
     );
