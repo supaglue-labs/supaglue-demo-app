@@ -1,7 +1,4 @@
-import {
-  apollaPrismaClient,
-  supagluePrismaClient,
-} from "@/remote/postgres/prisma";
+import { apollaPrismaClient, supagluePrismaClient } from "@/remote/prisma";
 import { inngest } from "./client";
 
 export const transformAndWriteObject = inngest.createFunction(

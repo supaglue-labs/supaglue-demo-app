@@ -1,22 +1,19 @@
-export type CrmContact = {
+export type ApollaContact = {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   emailAddress: string;
-  phoneNumbers: any[];
-  addresses: any[];
-  lastActivityAt: Date | null;
+  phoneNumber: string | null;
+  address: string | null;
   lifecycleStage: string | null;
-  rawData?: any;
 };
 
-export type CrmAccount = {
+export type ApollaAccount = {
   id: string;
-  name: string;
-  website: string;
-  industry: string;
-  phoneNumbers: any[];
-  rawData?: any;
+  name: string | null;
+  domain: string;
+  lifecycleStage: string | null;
+  industry: string | null;
 };
 
 export type PersonProspect = {

@@ -3,9 +3,9 @@ import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { companyProspects } from "@/lib/prospects_database";
-import { fetchCrmAccountsByWebsite } from "@/remote/postgres/fetch_crm_accounts";
+import { fetchAccountsByDomain } from "@/remote/apolla/fetch_accounts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
-import { CrmAccount } from "@/types/apolla";
+import { ApollaAccount } from "@/types/apolla";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
@@ -16,12 +16,10 @@ async function CompanyTable() {
   const activeCustomer = useCustomerContext();
   const activeConnection = await fetchActiveConnection(activeCustomer.id);
 
-  let crmAccountPageMatches: CrmAccount[] = [];
+  let apollaAccountPageMatches: ApollaAccount[] = [];
 
   if (activeConnection) {
-    crmAccountPageMatches = await fetchCrmAccountsByWebsite(
-      activeCustomer.id,
-      activeConnection.provider_name,
+    apollaAccountPageMatches = await fetchAccountsByDomain(
       companyProspects.map((company) => company.website)
     );
   }
@@ -63,8 +61,8 @@ async function CompanyTable() {
               company={company}
               key={`Company_${idx}`}
               providerName={activeConnection?.provider_name}
-              isSynced={crmAccountPageMatches.some(
-                (crmAccount) => crmAccount.website === company.website
+              isSynced={apollaAccountPageMatches.some(
+                (crmAccount) => crmAccount.domain === company.website
               )}
             />
           ))}

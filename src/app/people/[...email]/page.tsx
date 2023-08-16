@@ -2,9 +2,9 @@ import { Content } from "@/components/Content";
 import { Nav } from "@/components/Nav";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { peopleProspects } from "@/lib/prospects_database";
-import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
+import { fetchContactsByEmails } from "@/remote/apolla/fetch_contacts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
-import { CrmContact } from "@/types/apolla";
+import { ApollaContact } from "@/types/apolla";
 import Link from "next/link";
 
 function Avatar() {
@@ -80,23 +80,19 @@ export default async function Person({
   const activeCustomer = useCustomerContext();
   const activeConnection = await fetchActiveConnection(activeCustomer.id);
   const activeEmail = decodeURIComponent(email);
-  let crmContacts: CrmContact[] = [];
+  let apollaContacts: ApollaContact[] = [];
 
   if (activeConnection) {
-    crmContacts = await fetchCrmContactsByEmails(
-      activeCustomer.id,
-      activeConnection.provider_name,
-      [activeEmail]
-    );
+    apollaContacts = await fetchContactsByEmails([activeEmail]);
   }
 
   const person = peopleProspects.find(
     (contact) => contact.email === activeEmail
   );
-  const crmContact = crmContacts.find(
-    (crmContact) => crmContact.emailAddress === activeEmail
+  const apollaContact = apollaContacts.find(
+    (apollaContact) => apollaContact.emailAddress === activeEmail
   );
-  const isSynced = Boolean(crmContact);
+  const isSynced = Boolean(apollaContact);
   return (
     <>
       <Nav title="Person" />
@@ -125,7 +121,7 @@ export default async function Person({
             <Field
               className="w-full"
               label="Address"
-              field={`${crmContact?.addresses[0]?.street_1} ${crmContact?.addresses[0]?.city}, ${crmContact?.addresses[0]?.state} ${crmContact?.addresses[0]?.country}`}
+              field={apollaContact?.address ?? ""}
               showCrmBadge={true}
             />
             <div className="w-full">
@@ -141,7 +137,7 @@ export default async function Person({
                 disabled
                 rows={15}
                 className="w-full textarea textarea-bordered"
-                defaultValue={JSON.stringify(crmContact?.rawData, null, 3)}
+                defaultValue={JSON.stringify(apollaContact, null, 3)}
               ></textarea>
             </div>
           </>

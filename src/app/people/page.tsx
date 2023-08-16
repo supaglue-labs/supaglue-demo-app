@@ -3,9 +3,9 @@ import { Nav } from "@/components/Nav";
 import PersonRow from "@/components/people/PersonRow";
 import { useCustomerContext } from "@/hooks/useCustomerContext";
 import { peopleProspects } from "@/lib/prospects_database";
-import { fetchCrmContactsByEmails } from "@/remote/postgres/fetch_crm_contacts";
+import { fetchContactsByEmails } from "@/remote/apolla/fetch_contacts";
 import { fetchActiveConnection } from "@/remote/supaglue/fetch_active_connection";
-import { CrmContact } from "@/types/apolla";
+import { ApollaContact } from "@/types/apolla";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
@@ -16,11 +16,9 @@ async function PeopleTable() {
   const activeCustomer = useCustomerContext();
   const activeConnection = await fetchActiveConnection(activeCustomer.id);
 
-  let crmContactPageMatches: CrmContact[] = [];
+  let apollaContactPageMatches: ApollaContact[] = [];
   if (activeConnection) {
-    crmContactPageMatches = await fetchCrmContactsByEmails(
-      activeCustomer.id,
-      activeConnection.provider_name,
+    apollaContactPageMatches = await fetchContactsByEmails(
       peopleProspects.map((person) => person.email)
     );
   }
@@ -62,7 +60,7 @@ async function PeopleTable() {
               key={`Person_${idx}`}
               person={person}
               providerName={activeConnection?.provider_name}
-              isSynced={crmContactPageMatches.some(
+              isSynced={apollaContactPageMatches.some(
                 (crmContact) => crmContact.emailAddress === person.email
               )}
             />
