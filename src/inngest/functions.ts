@@ -32,7 +32,7 @@ export const transformAndWriteObject = inngest.createFunction(
 
             const apollaCreateRecord = {
               name: mappedData.name,
-              domain: mappedData.domain,
+              domain: mappedData.domain ?? "null",
               lifecycle_stage: mappedData.stage,
               updated_at: new Date(),
             };
