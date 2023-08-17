@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
       event_type: data.webhook_event_type, // `sync.complete`
       type: data.type, // `entity`
       entity_name: data.entity_name,
+      provider_name: data.provider_name,
     },
   });
 

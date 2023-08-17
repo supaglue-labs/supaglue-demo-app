@@ -156,27 +156,29 @@ model linear_issues {
 }
 
 model entity_contact {
-  supaglue_application_id String   @map("_supaglue_application_id")
-  supaglue_provider_name  String   @map("_supaglue_provider_name")
-  supaglue_customer_id    String   @map("_supaglue_customer_id")
-  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
-  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
-  supaglue_raw_data       Json     @map("_supaglue_raw_data")
-  supaglue_mapped_data    Json     @map("_supaglue_mapped_data")
-  id                      String
+  supaglue_application_id   String   @map("_supaglue_application_id")
+  supaglue_provider_name    String   @map("_supaglue_provider_name")
+  supaglue_customer_id      String   @map("_supaglue_customer_id")
+  supaglue_id               String   @map("_supaglue_id")
+  supaglue_emitted_at       DateTime @map("_supaglue_emitted_at")
+  supaglue_last_modified_at DateTime @map("_supaglue_last_modified_at")
+  supaglue_is_deleted       Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data         Json     @map("_supaglue_raw_data")
+  supaglue_mapped_data      Json     @map("_supaglue_mapped_data")
 
-  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, supaglue_id])
 }
 
 model entity_account {
-  supaglue_application_id String   @map("_supaglue_application_id")
-  supaglue_provider_name  String   @map("_supaglue_provider_name")
-  supaglue_customer_id    String   @map("_supaglue_customer_id")
-  supaglue_emitted_at     DateTime @map("_supaglue_emitted_at")
-  supaglue_is_deleted     Boolean  @map("_supaglue_is_deleted")
-  supaglue_raw_data       Json     @map("_supaglue_raw_data")
-  supaglue_mapped_data    Json     @map("_supaglue_mapped_data")
-  id                      String
+  supaglue_application_id   String   @map("_supaglue_application_id")
+  supaglue_provider_name    String   @map("_supaglue_provider_name")
+  supaglue_customer_id      String   @map("_supaglue_customer_id")
+  supaglue_id               String   @map("_supaglue_id")
+  supaglue_emitted_at       DateTime @map("_supaglue_emitted_at")
+  supaglue_last_modified_at DateTime @map("_supaglue_last_modified_at")
+  supaglue_is_deleted       Boolean  @map("_supaglue_is_deleted")
+  supaglue_raw_data         Json     @map("_supaglue_raw_data")
+  supaglue_mapped_data      Json     @map("_supaglue_mapped_data")
 
-  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, id])
+  @@id([supaglue_application_id, supaglue_provider_name, supaglue_customer_id, supaglue_id])
 }

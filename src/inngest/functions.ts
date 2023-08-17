@@ -1,5 +1,7 @@
 import { apollaPrismaClient, supagluePrismaClient } from "@/remote/prisma";
 import { inngest } from "./client";
+import { remoteAccountToApollaAccount } from "./mappers/account";
+import { remoteContactToApollaContact } from "./mappers/contact";
 
 export const transformAndWriteObject = inngest.createFunction(
   { name: "Transform and write object records" },
@@ -8,6 +10,7 @@ export const transformAndWriteObject = inngest.createFunction(
     const {
       type: dataModel, // data model
       entity_name: entityName,
+      provider_name: providerName,
     } = event.data;
 
     if (dataModel !== "entity") {
@@ -27,26 +30,24 @@ export const transformAndWriteObject = inngest.createFunction(
           for (const supaglueRecord of supaglueRecords) {
             const mappedData = supaglueRecord.supaglue_mapped_data as any;
 
-            const apollaCreateRecord = {
-              name: mappedData.name,
-              domain: mappedData.domain ?? "null",
-              lifecycle_stage: mappedData.stage,
-              updated_at: new Date(),
-            };
+            const apollaCreateRecord = remoteAccountToApollaAccount(
+              providerName,
+              mappedData
+            );
 
             const apollaUpdateRecord = {
-              id: supaglueRecord.id,
+              id: supaglueRecord.supaglue_id,
               ...apollaCreateRecord,
             };
 
             await apollaPrismaClient.apolla_account.upsert({
               where: {
-                id: supaglueRecord.id,
+                id: supaglueRecord.supaglue_id,
               },
               create: apollaCreateRecord,
               update: apollaUpdateRecord,
             });
-            logger.info("Upserted", { id: supaglueRecord.id });
+            logger.info("Upserted", { id: supaglueRecord.supaglue_id });
           }
         } else if (entityName === "contact") {
           const supaglueRecords =
@@ -56,25 +57,24 @@ export const transformAndWriteObject = inngest.createFunction(
           for (const supaglueRecord of supaglueRecords) {
             const mappedData = supaglueRecord.supaglue_mapped_data as any;
 
-            const apollaCreateRecord = {
-              name: mappedData.name,
-              email_address: mappedData.email,
-              updated_at: new Date(),
-            };
+            const apollaCreateRecord = remoteContactToApollaContact(
+              providerName,
+              mappedData
+            );
 
             const apollaUpdateRecord = {
-              id: supaglueRecord.id,
+              id: supaglueRecord.supaglue_id,
               ...apollaCreateRecord,
             };
 
             await apollaPrismaClient.apolla_contact.upsert({
               where: {
-                id: supaglueRecord.id,
+                id: supaglueRecord.supaglue_id,
               },
               create: apollaCreateRecord,
               update: apollaUpdateRecord,
             });
-            logger.info("Upserted", { id: supaglueRecord.id });
+            logger.info("Upserted", { id: supaglueRecord.supaglue_id });
           }
         }
       }
